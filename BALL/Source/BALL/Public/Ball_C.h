@@ -10,7 +10,7 @@ class BALL_API ABall_C : public APawn
 {
 	GENERATED_BODY()
 
-	/** StaticMesh used for the ball */
+	/** StaticMesh used for the ball -- we don't create we find Components */
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ball, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent *Ball;
 
