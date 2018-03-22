@@ -29,8 +29,8 @@ void ABall_C::Initialize(UStaticMeshComponent * ball, USceneComponent * scene, U
 void ABall_C::Setting()
 {
 	Scene->bAbsoluteRotation = true; // Rotation of the ball should not affect rotation of boom
-	SpringArm->bDoCollisionTest = false;
-	//SpringArm->bAbsoluteRotation = true; // must not be bAbsolutRotation = true because Scene Component work
+	//SpringArm->bDoCollisionTest = false;
+	SpringArm->bAbsoluteRotation = false; // must not be bAbsolutRotation = true because Scene Component work
 }
 
 // Called when the game starts or when spawned
