@@ -3,14 +3,14 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "MoveRightLeft.generated.h"
+#include "MotionTrigger.generated.h"
 
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWallMoving);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALL_API UMoveRightLeft : public UActorComponent
+class BALL_API UMotionTrigger : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -25,7 +25,7 @@ private:
 
 public:	
 	// Sets default values for this component's properties
-	UMoveRightLeft();
+	UMotionTrigger();
 
 	// Dynamic Multicast Delegate in Blueprint
 	UPROPERTY(BlueprintAssignable)
