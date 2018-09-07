@@ -24,8 +24,8 @@ void UMotionTrigger::BeginPlay()
 	// ...
 	Owner = GetOwner();
 	OwnerOriginLocation = GetOwner()->GetActorLocation();
-	UE_LOG(LogTemp, Warning, TEXT("OwnerClass Name %s"), *Owner->GetName());
-	UE_LOG(LogTemp, Warning, TEXT("OwnerOriginLocation %s"), *OwnerOriginLocation.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("OwnerClass Name %s"), *Owner->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("OwnerOriginLocation %s"), *OwnerOriginLocation.ToString());
 	
 }
 
@@ -36,17 +36,20 @@ void UMotionTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	UE_LOG(LogTemp, Warning, TEXT("1_bRight %i"), bRight);
+	//UE_LOG(LogTemp, Warning, TEXT("1_bRight %i"), bRight);
 	auto OwnerCurrentLocation = GetOwner()->GetActorLocation();
 	TickTime += DeltaTime;
 	if (TickTime > 5.f)
 	{
 		Move.Broadcast();
-		UE_LOG(LogTemp, Warning, TEXT("2_bRight %i"), bRight);
+		//UE_LOG(LogTemp, Warning, TEXT("2_bRight %i"), bRight);
 	}
 	
-	UE_LOG(LogTemp, Warning, TEXT("OwnerCurrentLocation %s"), *OwnerCurrentLocation.ToString());
-	UE_LOG(LogTemp, Error, TEXT("OwnerOriginLocation %s"), *OwnerOriginLocation.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("OwnerCurrentLocation %s"), *OwnerCurrentLocation.ToString());
+	//UE_LOG(LogTemp, Error, TEXT("OwnerOriginLocation %s"), *OwnerOriginLocation.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("GetActorLocation %s"), *GetOwner()->GetActorLocation().ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("========================================================="));
+
 }
 
 
