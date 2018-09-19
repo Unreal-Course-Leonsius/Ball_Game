@@ -39,7 +39,7 @@ void UMotionTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	//UE_LOG(LogTemp, Warning, TEXT("1_bRight %i"), bRight);
 	auto OwnerCurrentLocation = GetOwner()->GetActorLocation();
 	TickTime += DeltaTime;
-	if (TickTime > 5.f)
+	if (TickTime > 1.f)
 	{
 		Move.Broadcast();
 		//UE_LOG(LogTemp, Warning, TEXT("2_bRight %i"), bRight);
