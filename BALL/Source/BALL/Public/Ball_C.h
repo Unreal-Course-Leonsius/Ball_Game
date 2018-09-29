@@ -42,8 +42,10 @@ public:
 	/** Indicates whether we can currently jump, use to prevent double jumping */
 	bool bCanJump;
 
-	/** Indicates whether we can use SetActorLocation() Function */
-	bool bCanActorLocation;
+	/** Indicates whether we can use MoveForward() Function */
+	bool bCanMoveForward;
+
+public:
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UStaticMeshComponent *ball, USceneComponent *scene, USpringArmComponent *springarm, UCameraComponent* camera);
@@ -51,12 +53,21 @@ public:
 	/* Put Components Settings */
 	void Setting();
 
+	/** Handle jump action. Be Careful Jump function use Private member of Ball Class */
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Jump();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	// AActor interface
+	UFUNCTION()
 	virtual void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+
+	// We may Use this Function instead of NotifyHit BECAUSE there was problem about Jump Function()
+	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 
 
 	/// Function Ability
@@ -70,8 +81,6 @@ protected:
 	/** Called to move ball forwards and backwards */
 	void MoveForward(float Val);
 
-	/** Handle jump action. */
-	void Jump();
 
 protected:
 

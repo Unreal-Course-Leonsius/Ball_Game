@@ -17,7 +17,7 @@ ABall_C::ABall_C()
 	MoveForward_Backward = 200.f;
 
 	bCanJump = true; // Start being able to jump
-	bCanActorLocation = true;
+	bCanMoveForward = true;
 	
 }
 
@@ -56,13 +56,26 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
-	bCanJump = true;
-	bCanActorLocation = true;
-
 	HitActor = Hit.GetActor();
+	FString name = OtherComp->GetName();  //HitActor->GetName();
+	//UE_LOG(LogTemp, Warning, TEXT("1 NOTIFYHIT - CanMoveForward = %s"), *name);
 
+	if (OtherComp->GetName() == "Ground")
+	{
+		bCanJump = true;
+		bCanMoveForward = true;
+		//UE_LOG(LogTemp, Warning, TEXT("otherComp = %s"), *OtherComp->GetName());
+	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("1 NOTIFYHIT - CanMoveForward = %i"), bCanMoveForward);
 	//UE_LOG(LogTemp, Warning, TEXT("HitActor's Name = %s"),*HitActor->GetName());
 }
+
+/*void ABall_C::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+
+}*/
+
 
 // Called every frame
 void ABall_C::Tick(float DeltaTime)
@@ -160,7 +173,7 @@ void ABall_C::MoveForward(float Val)
 	auto Direction = GetForwardVector(NewRotator);
 	Direction = Direction * Val * 15;
 
-	if (bCanActorLocation)
+	if (bCanMoveForward)
 	{
 		//auto Primitive = GetRootPrimitiveComponent();
 		Ball->SetPhysicsLinearVelocity(Direction, true);
@@ -174,14 +187,17 @@ void ABall_C::MoveForward(float Val)
 
 void ABall_C::Jump()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("1 JUMP - CanMoveForward = %i"), bCanMoveForward);
 	if (bCanJump)
 	{
 		const FVector Impulse = FVector(0.f, 0.f, JumpImpulse);
 		Ball->AddImpulse(Impulse);
 		bCanJump = false;
-		bCanActorLocation = false;
+		bCanMoveForward = false;
 		//ForceApply();
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("2 JUMP - CanMoveForward = %i"), bCanMoveForward);
 }
 
 /// Rotator Transform Vectors

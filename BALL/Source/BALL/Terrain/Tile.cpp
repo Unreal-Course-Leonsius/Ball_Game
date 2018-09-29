@@ -48,7 +48,6 @@ void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void ATile::SpawnActorsRandomLocation(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations)
 {
-	//TArray<AActor*> GarbageObject;
 
 	TArray<bool> IsTheLocationFree;
 	FillBoolArray(IsTheLocationFree, SpawnLocations.Num());
@@ -68,7 +67,7 @@ void ATile::SpawnActorsRandomLocation(TSubclassOf<AActor> ToSpawn, int32 MinSpaw
 		//GarbageObject.Add(Spawn);
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("================= Spawn Actor Random Location ====================="));
+	//UE_LOG(LogTemp, Warning, TEXT("================= Spawn Actor Random Location ====================="));
 
 	return;
 }
@@ -77,13 +76,13 @@ void ATile::SpawnActorsRandomLocation(TSubclassOf<AActor> ToSpawn, int32 MinSpaw
 int32 ATile::SetUniqueIndext(int32 MaxRange, TArray<bool> &IsTheLocationFree)
 {
 	int32 spawnlocalindex = 0; // SpawnLocationIndex
-	bool OutLoop = true;
-	while(OutLoop)
+	bool InLoop = true;
+	while(InLoop)
 	{
 		spawnlocalindex = FMath::RandRange(0, MaxRange);
 		if (!IsTheLocationFree[spawnlocalindex])
 		{
-			OutLoop = false;
+			InLoop = false;
 		}
 
 		UE_LOG(LogTemp, Warning, TEXT("spawnlocalindex ==== While = %i"), spawnlocalindex);
