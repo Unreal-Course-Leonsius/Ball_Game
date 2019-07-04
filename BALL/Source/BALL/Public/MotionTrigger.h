@@ -8,6 +8,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWallMoving);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FWallMovingTrigger, int32, WallIndex);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BALL_API UMotionTrigger : public UActorComponent
@@ -31,8 +32,40 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FWallMoving Move;  // we need it only one time because TimeLine is looping
 
+	/// we need it for Growing Tile
+	UPROPERTY(BlueprintAssignable)
+	FWallMoving MovingRightWall_1;
+
+	UPROPERTY(BlueprintAssignable)
+	FWallMoving MovingRightWall_2;
+
+	UPROPERTY(BlueprintAssignable)
+	FWallMoving MovingLeftWall;
+
+	UPROPERTY()
+	TArray<FWallMoving> WallMovingTrigger;
+
+	
 
 	bool bRight = true;  // UPROPERTY(BlueprintReadWrite, Category = "Ready To Move")
+
+protected:
+
+	FTimerDelegate TimerDel;
+	FTimerHandle Timer;
+
+	int32 growing_Wall_Number = 3;
+	int32 growing_Wall_Number_Index = 0;
+	float growing_Delation_Time = 0.2f;
+
+
+protected:
+
+	UFUNCTION(BlueprintCallable, Category = "Growing Wall")
+	void GrowingWall();
+
+	UFUNCTION()
+	void StartGrowing();
 
 
 protected:

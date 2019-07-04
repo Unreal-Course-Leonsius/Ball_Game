@@ -15,6 +15,7 @@ class BALL_API ATile : public AActor
 private:
 
 	//UStaticMeshComponent* Ground;
+	FVector ArrowLocation = FVector(5000.f, 0.f, 0.f);
 
 	int32 maxSpawnNumber = 0; // for Spawn Actor
 	int32 indexLocation = 0; // for Spawn Actor's LocatonArray
@@ -30,7 +31,7 @@ private:
 public:	
 
 	// Sets default values for this actor's properties
-	ATile();
+	ATile(const FObjectInitializer& ObjectInitializer);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -82,5 +83,8 @@ protected:
 
 	UFUNCTION()
 	void GenerateSpawnActor_ConcretLocation(TSubclassOf<AActor>ToSpawn, TArray<FVector> SpawnLocation);
+
+	UFUNCTION(BlueprintCallable, Category = "Spwan Actor")
+	void SpawnActors_TimeLineObjects(TSubclassOf<AActor>ToSpawn, TArray<AActor*> &SpawnActors, TArray<FVector> SpawnLocations);
 
 };

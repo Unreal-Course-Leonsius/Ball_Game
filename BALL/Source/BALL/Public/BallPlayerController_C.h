@@ -20,7 +20,11 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void SetPawn(APawn* InPawn) override;
+
 	ABall_C* GetPlayerBall() const;
 	
+	UFUNCTION()
+	void OnPossessedBallDeath();
 	
 };

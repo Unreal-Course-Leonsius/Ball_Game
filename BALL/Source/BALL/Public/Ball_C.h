@@ -5,6 +5,9 @@
 #include "GameFramework/Pawn.h"
 #include "Ball_C.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBallDelegate);
+
 UCLASS()
 class BALL_API ABall_C : public APawn
 {
@@ -19,6 +22,10 @@ class BALL_API ABall_C : public APawn
 	class USpringArmComponent *SpringArm;
 
 	class UCameraComponent* Camera;
+
+private:
+
+	float DeathTime;
 
 public:
 	// Sets default values for this pawn's properties
@@ -45,6 +52,9 @@ public:
 	/** Indicates whether we can use MoveForward() Function */
 	bool bCanMoveForward;
 
+	
+	FBallDelegate OnDeath;
+
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
@@ -67,8 +77,10 @@ protected:
 
 	// We may Use this Function instead of NotifyHit BECAUSE there was problem about Jump Function()
 	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-
+	
+	/// nomore need Event we substitution it UnPosses() function in BallPlayerController
+	//UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	//void Death();
 
 	/// Function Ability
 
@@ -86,6 +98,7 @@ protected:
 
 	AActor * HitActor = nullptr;
 	FString HitActorName;
+	
 
 	/// Rotator Transform Vectors
 	/** FRotator Transform ForwardVector */
@@ -98,7 +111,7 @@ protected:
 	FVector GetMyRightVector(FRotator InRot);
 
 
-	void GetNotifyHitName(FHitResult& HitActorr);
+	void GetNotifyHitName(AActor* HitActorr);
 
 	void ForceApply();
 

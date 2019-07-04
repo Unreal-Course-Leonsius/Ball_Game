@@ -14,7 +14,7 @@ ABall_C::ABall_C()
 	RollTorque = 500000000.0f;
 	JumpImpulse = 350000.0f;
 	MoveRihgt_Left = 20.f;
-	MoveForward_Backward = 200.f;
+	MoveForward_Backward = 300.f;
 
 	bCanJump = true; // Start being able to jump
 	bCanMoveForward = true;
@@ -56,7 +56,7 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
-	HitActor = Hit.GetActor();
+	
 	FString name = OtherComp->GetName();  //HitActor->GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("1 NOTIFYHIT - CanMoveForward = %s"), *name);
 
@@ -67,6 +67,18 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 		//UE_LOG(LogTemp, Warning, TEXT("otherComp = %s"), *OtherComp->GetName());
 	}
 
+	HitActor = Hit.GetActor();
+	if (ensure(HitActor == nullptr)) { return; }
+
+	auto arrowComponent = HitActor->FindComponentByClass<UArrowComponent>();
+
+	if (arrowComponent == nullptr)
+	{
+		GetNotifyHitName(HitActor);
+		OnDeath.Broadcast();
+		//Death();
+	}
+	
 	//UE_LOG(LogTemp, Warning, TEXT("1 NOTIFYHIT - CanMoveForward = %i"), bCanMoveForward);
 	//UE_LOG(LogTemp, Warning, TEXT("HitActor's Name = %s"),*HitActor->GetName());
 }
@@ -90,6 +102,9 @@ void ABall_C::Tick(float DeltaTime)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("HitActor's Name = NONE"));
 	}*/
+	//MoveForward(1.f);
+	//GetNotifyHitName(HitActor);
+
 }
 
 // Called to bind functionality to input
@@ -239,17 +254,14 @@ void ABall_C::ForceApply()
 	
 }
 
-void ABall_C::GetNotifyHitName(FHitResult & HitActorr)
+void ABall_C::GetNotifyHitName(AActor* HitActorr)
 {
-	auto HA = HitActorr.GetActor();
-	if (HA == nullptr)
-	{
-		HitActorName = "None";
-	}
-	else
-	{
-		HitActorName = HA->GetName();
-	}
+
+	//auto HA = HitActorr.GetActor();
+	//auto arrowComponent = HitActorr->FindComponentByClass<UArrowComponent>();
+	
+	HitActorName = HitActorr->GetName();
+	UE_LOG(LogTemp, Error, TEXT("BALL HIT = %s"), *HitActorName);
 }
 
 /*FName ABall_C::GetNotifyHitName(FHitResult & HitActor)

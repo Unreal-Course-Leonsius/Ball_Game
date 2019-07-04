@@ -5,9 +5,11 @@
 #include "UObject/UObjectGlobals.h"
 #include "Tile.h"
 
+#define OUT
+
 
 // Sets default values
-ATile::ATile()
+ATile::ATile(const FObjectInitializer& ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -19,10 +21,11 @@ ATile::ATile()
 
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;
+	ArrowComponent = ObjectInitializer.CreateDefaultSubobject<UArrowComponent>(this, TEXT("Arrow"));
 	//ArrowComponent = CreateDefaultSubobject<UArrowComponent>(this, TEXT("Arrow")); // CreateEditorOnlyDefaultSubobject<UArrowComponent>(TEXT("Arrow"));  // For ArrowComponent don't work DefaultSubobject<>() function
-	ArrowComponent = CreateEditorOnlyDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	//ArrowComponent = CreateEditorOnlyDefaultSubobject<UArrowComponent>(TEXT("Arrow")); // the function work only Editor and therefor have problem when Game Packaging
 	ArrowComponent->SetupAttachment(Root);
-	ArrowComponent->SetRelativeLocation(FVector(5000, 0, 0));
+	ArrowComponent->SetRelativeLocation(ArrowLocation);  // Set location relative to the world
 	// ArrowComponent->AddRelativeLocation(FVector(3000, 0, -50));
 
 }
@@ -32,6 +35,7 @@ void ATile::BeginPlay()
 {
 	Super::BeginPlay();
 	//UE_LOG(LogTemp, Warning, TEXT("Tile BeginPlay C++"));
+
 	
 }
 
@@ -158,6 +162,24 @@ void ATile::GenerateSpawnActor_ConcretLocation(TSubclassOf<AActor> ToSpawn, TArr
 	}
 
 	return;
+}
+
+
+/// This function is used for Tile only with TimeLine
+void ATile::SpawnActors_TimeLineObjects(TSubclassOf<AActor> ToSpawn, TArray<AActor*> &SpawnActors, TArray<FVector> SpawnLocations)
+{
+
+	for (int32 index = 0; index < SpawnLocations.Num(); index++)
+	{
+		auto SpawnActor = GetWorld()->SpawnActor<AActor>(ToSpawn);
+		if (!ensure(SpawnActor)) return;
+
+		SpawnActors.Add(SpawnActor);
+		SpawnActor->SetActorRelativeLocation(SpawnLocations[index]);
+		SpawnActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+
+	}
+
 }
 
 

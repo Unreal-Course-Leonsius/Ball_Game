@@ -13,8 +13,26 @@ UMotionTrigger::UMotionTrigger()
 
 	// ...
 
+	//WallMovingTrigger = CreateDefaultSubobject<FWallMoving>(FName("Wall Moving Array"));
+	
 }
 
+
+void UMotionTrigger::GrowingWall()
+{
+	TimerDel.BindUFunction(this, FName("StartGrowing"));
+	//TimerDel.BindUFunction(this, FName("StartGrowing"));
+	GetWorld()->GetTimerManager().SetTimer(Timer, TimerDel, growing_Delation_Time, true);
+}
+
+void UMotionTrigger::StartGrowing()
+{
+	if (growing_Wall_Number_Index < growing_Wall_Number)
+	{
+		WallMovingTrigger[growing_Wall_Number_Index].Broadcast();
+		growing_Wall_Number_Index++;
+	}
+}
 
 // Called when the game starts
 void UMotionTrigger::BeginPlay()
@@ -22,6 +40,11 @@ void UMotionTrigger::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+
+	WallMovingTrigger.Add(MovingRightWall_1);
+	WallMovingTrigger.Add(MovingLeftWall);
+	WallMovingTrigger.Add(MovingRightWall_2);
+
 	Owner = GetOwner();
 	OwnerOriginLocation = GetOwner()->GetActorLocation();
 	//UE_LOG(LogTemp, Warning, TEXT("OwnerClass Name %s"), *Owner->GetName());
@@ -53,7 +76,7 @@ void UMotionTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 }
 
 
-// ========================= Need not any more thus function ========================= //
+// ========================= Need not any more this function ========================= //
 
 
 /*void UMotionTrigger::MoveLeftRight()
