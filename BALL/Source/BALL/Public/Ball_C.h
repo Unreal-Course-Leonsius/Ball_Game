@@ -13,8 +13,6 @@ class BALL_API ABall_C : public APawn
 {
 	GENERATED_BODY()
 
-private:
-
 	/** StaticMesh used for the ball -- we don't create we find Components */
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ball, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent *Ball;
@@ -25,22 +23,9 @@ private:
 
 	class UCameraComponent* Camera;
 
-	float DeathTime;
-
-	float Throttle;
-	float SteeringThrow;
-
-	UPROPERTY(EditAnywhere)
-	float MaxDrivingForce = 10000;
-
-	UPROPERTY(EditAnywhere)
-	float Mass = 1000;
-
-	struct FVector Velocity;
-
 private:
 
-	void SimulateMove(float DeltaTime);
+	float DeathTime;
 
 public:
 	// Sets default values for this pawn's properties
@@ -48,7 +33,7 @@ public:
 
 	/** Torque to apply when trying to roll ball */
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float RollTorque = 500;
+	float RollTorque;
 
 	/** Vertical impulse to apply when pressing jump */
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")

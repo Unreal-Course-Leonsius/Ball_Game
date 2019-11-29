@@ -3,9 +3,6 @@
 #include "BALL.h"
 #include "Ball_C.h"
 
-#include "Math/Vector.h"
-
-
 
 // Sets default values
 ABall_C::ABall_C()
@@ -92,6 +89,24 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 }*/
 
 
+// Called every frame
+void ABall_C::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	/*if (HitActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HitActor's Name = %s"), *HitActor->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HitActor's Name = NONE"));
+	}*/
+	//MoveForward(1.f);
+	//GetNotifyHitName(HitActor);
+
+}
+
 // Called to bind functionality to input
 void ABall_C::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -108,93 +123,6 @@ void ABall_C::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// Jump
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABall_C::Jump);
 }
-
-// Called every frame
-void ABall_C::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	SimulateMove(DeltaTime);
-
-	/*if (HitActor)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HitActor's Name = %s"), *HitActor->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HitActor's Name = NONE"));
-	}*/
-	//MoveForward(1.f);
-	//GetNotifyHitName(HitActor);
-
-}
-
-
-
-void ABall_C::SimulateMove(float DeltaTime)
-{
-
-	/// 1 - First Version We need not it
-	//const FVector Torque = FVector(0.f, Val * RollTorque, 0.f);
-	//Ball->AddTorque(Torque);	// Ball->AddTorque(Torque, FName(TEXT("None")), true); true means that torque apply no attantion Ball mass it rotate itself
-
-	/// 2 - Second Version We need not it
-	/*auto WorldDirection = GetActorLocation();
-	WorldDirection += FVector(Val * GetWorld()->GetDeltaSeconds() * MoveForward_Backward, 0.f, 0.f);
-	if(bCanActorLocation)
-	{
-		//SetActorLocation(WorldDirection);
-	}
-	*/
-
-	
-	FVector Force = GetActorForwardVector() * Throttle * MaxDrivingForce;
-
-	//Force += GetAirResistance();
-	//Force += GetRollingResistance();
-
-	////UE_LOG(LogTemp, Warning, TEXT("AirResistance = %s"), *GetAirResistance().ToString());
-	////UE_LOG(LogTemp, Error, TEXT("Force = %s"), *Force.ToString());
-	////UE_LOG(LogTemp, Error, TEXT("Velocity = %s"), *Velocity.ToString());
-
-	FVector Acceleration = Force / Mass;
-
-	Velocity = Velocity + Acceleration * DeltaTime;
-
-	FVector Translation = Velocity * 100 * DeltaTime;  // x = v * t
-
-	//AddActorWorldOffset(Translation, true);
-
-	//UpdateLocationFromVelocity(Move.DeltaTime);
-
-
-	//ApplyRotation(Move.DeltaTime, Move.SteeringThrow);
-
-	/// ================ old ============
-	auto WorldDirection = GetActorLocation();
-	WorldDirection += FVector(Throttle * GetWorld()->GetDeltaSeconds() * MoveForward_Backward, 0.f, 0.f);
-
-	FRotator ControlRotator = GetControlRotation();
-	FRotator NewRotator = FRotator(0.f, 0.f, ControlRotator.Yaw);
-	auto Direction = GetForwardVector(NewRotator);
-	Direction = Direction * Throttle * 15;
-
-	if (bCanMoveForward)
-	{
-		//auto Primitive = GetRootPrimitiveComponent();
-		Ball->SetPhysicsLinearVelocity(Direction, true);
-		SetActorLocation(WorldDirection);
-	}
-}
-
-void ABall_C::MoveForward(float Val)
-{
-
-	Throttle = Val;
-
-}
-
-
 
 
 void ABall_C::Azimuth(float Val)
@@ -235,6 +163,40 @@ void ABall_C::MoveRight(float Val)
 	SetActorLocation(WorldDirection);
 	//Ball->SetPhysicsAngularVelocity(Direction, true);
 
+}
+
+void ABall_C::MoveForward(float Val)
+{
+	/// 1 - First Version We need not it
+	//const FVector Torque = FVector(0.f, Val * RollTorque, 0.f);
+	//Ball->AddTorque(Torque);	// Ball->AddTorque(Torque, FName(TEXT("None")), true); true means that torque apply no attantion Ball mass it rotate itself
+
+	/// 2 - Second Version We need not it
+	/*auto WorldDirection = GetActorLocation();
+	WorldDirection += FVector(Val * GetWorld()->GetDeltaSeconds() * MoveForward_Backward, 0.f, 0.f);
+	if(bCanActorLocation)
+	{
+		//SetActorLocation(WorldDirection);
+	}
+	*/
+
+	auto WorldDirection = GetActorLocation();
+	WorldDirection += FVector(Val * GetWorld()->GetDeltaSeconds() * MoveForward_Backward, 0.f, 0.f);
+
+	FRotator ControlRotator = GetControlRotation();
+	FRotator NewRotator = FRotator(0.f, 0.f, ControlRotator.Yaw);
+	auto Direction = GetForwardVector(NewRotator);
+	Direction = Direction * Val * 15;
+
+	if (bCanMoveForward)
+	{
+		//auto Primitive = GetRootPrimitiveComponent();
+		Ball->SetPhysicsLinearVelocity(Direction, true);
+		SetActorLocation(WorldDirection);
+	}
+	
+
+	
 }
 
 
