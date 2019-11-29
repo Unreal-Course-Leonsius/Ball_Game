@@ -18,7 +18,7 @@ void AInfiniteTerrainGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//GenerateTiles();
+	GenerateTiles();
 	//UE_LOG(LogTemp, Warning, TEXT("GameMode BeginPlay C++"));
 
 }
