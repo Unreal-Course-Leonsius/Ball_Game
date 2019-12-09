@@ -64,7 +64,6 @@ protected:
 	FTimerDelegate TimerDel;
 	FTimerHandle Timer;
 
-	float DelationTime = 0.1f;
 
 protected:
 
@@ -75,7 +74,7 @@ protected:
 	void SpawnActorsRandomLocation(TSubclassOf<AActor>ToSpawn, int32 MinSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations);
 
 	UFUNCTION(BlueprintCallable, Category = "Spwan Actor")
-	void SpawnActorConcretLocation(TSubclassOf<AActor>ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations);
+	void SpawnActorConcretLocation(TSubclassOf<AActor>ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations, float DelationTime);
 
 
 	UFUNCTION(BlueprintCallable, Category = "Spwan Actor")

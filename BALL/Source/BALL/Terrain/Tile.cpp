@@ -130,7 +130,7 @@ void ATile::DestroySpawnActors()
 	}
 }
 
-void ATile::SpawnActorConcretLocation(TSubclassOf<AActor> ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations)
+void ATile::SpawnActorConcretLocation(TSubclassOf<AActor> ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations, float DelationTime)
 {
 	maxSpawnNumber = MaxSpawn;
 	indexLocation = 0;

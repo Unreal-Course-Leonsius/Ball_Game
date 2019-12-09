@@ -13,6 +13,8 @@ class BALL_API ABall_C : public APawn
 {
 	GENERATED_BODY()
 
+private:
+
 	/** StaticMesh used for the ball -- we don't create we find Components */
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ball, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent *Ball;
@@ -23,13 +25,26 @@ class BALL_API ABall_C : public APawn
 
 	class UCameraComponent* Camera;
 
-private:
-
 	float DeathTime;
 
-public:
-	// Sets default values for this pawn's properties
-	ABall_C();
+	float InputForward;
+	float InputRight;
+
+	float Velocity = 0;
+
+	/** Indicates whether we can currently jump, use to prevent double jumping */
+	bool bCanJump;
+
+	/** Indicates whether we can use MoveForward() Function */
+	bool bCanMoveForward;
+
+private:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Ball")
+	float Mass = 100;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Ball")
+	float DragCoefficient = 60;
 
 	/** Torque to apply when trying to roll ball */
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")
@@ -41,16 +56,66 @@ public:
 
 	/** MoveRight MoveForward Speed */
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float MoveRihgt_Left;
+	float MoveRightVector;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float MoveForward_Backward;
+	float MoveForwardVector;
 
-	/** Indicates whether we can currently jump, use to prevent double jumping */
-	bool bCanJump;
+	UPROPERTY(EditDefaultsOnly, Category = "Ball")
+	float MaxMoveForce;
 
-	/** Indicates whether we can use MoveForward() Function */
-	bool bCanMoveForward;
+private:
+
+	void SimulateMove(float DeltaTime);
+	void UpdateLocation(FVector direction, FVector worldDirection, float DeltaTime);
+	//void GetAirResistance();
+
+protected:
+
+	/// Function Ability
+	void Azimuth(float Val);
+	void Elevation(float Val);
+
+	/** Called for side to side input */
+	void MoveRight(float Val);
+
+	/** Called to move ball forwards and backwards */
+	void MoveForward(float Val);
+
+
+
+	// AActor interface
+	UFUNCTION()
+	virtual void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+
+	// We may Use this Function instead of NotifyHit BECAUSE there was problem about Jump Function()
+	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	/// nomore need Event we substitution it UnPosses() function in BallPlayerController
+	//UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	//void Death();
+
+	AActor * HitActor = nullptr;
+	FString HitActorName;
+
+
+	/// Rotator Transform Vectors
+	/** FRotator Transform ForwardVector */
+	FVector GetForwardVector(FRotator InRot);
+
+	/** FRotator Transform UpVector*/
+	FVector GetMyUpVector(FRotator InRot);
+
+	/** FRotator Transform Right Vector*/
+	FVector GetMyRightVector(FRotator InRot);
+
+
+	void GetNotifyHitName(AActor* HitActorr);
+
+
+public:
+	// Sets default values for this pawn's properties
+	ABall_C();
 
 	
 	FBallDelegate OnDeath;
@@ -67,58 +132,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Jump();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	// AActor interface
-	UFUNCTION()
-	virtual void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
-
-	// We may Use this Function instead of NotifyHit BECAUSE there was problem about Jump Function()
-	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-	
-	/// nomore need Event we substitution it UnPosses() function in BallPlayerController
-	//UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
-	//void Death();
-
-	/// Function Ability
-
-	void Azimuth(float Val);
-	void Elevation(float Val);
-
-	/** Called for side to side input */
-	void MoveRight(float Val);
-
-	/** Called to move ball forwards and backwards */
-	void MoveForward(float Val);
-
-
-protected:
-
-	AActor * HitActor = nullptr;
-	FString HitActorName;
-	
-
-	/// Rotator Transform Vectors
-	/** FRotator Transform ForwardVector */
-	FVector GetForwardVector(FRotator InRot);
-
-	/** FRotator Transform UpVector*/
-	FVector GetMyUpVector(FRotator InRot);
-
-	/** FRotator Transform Right Vector*/
-	FVector GetMyRightVector(FRotator InRot);
-
-
-	void GetNotifyHitName(AActor* HitActorr);
-
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ForceApply();
 
 
-	//FName GetNotifyHitName(FHitResult& HitActor);
 
 public:	
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
