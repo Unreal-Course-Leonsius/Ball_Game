@@ -126,6 +126,18 @@ void ABall_C::Tick(float DeltaTime)
 		5.f
 	);
 
+	DrawDebugLine
+	(
+		GetWorld(),
+		GetActorLocation() + FVector(0, 0, 50.f),
+		GetVelocity(),
+		FColor(0, 255, 0),
+		false,
+		0.f,
+		0.f,
+		5.f
+	);
+
 	SimulateMove(DeltaTime);
 
 	/*if (HitActor)
