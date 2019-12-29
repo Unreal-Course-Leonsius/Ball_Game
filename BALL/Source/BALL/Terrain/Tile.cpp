@@ -88,10 +88,10 @@ int32 ATile::SetUniqueIndext(int32 MaxRange, TArray<bool> &IsTheLocationFree)
 			InLoop = false;
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("spawnlocalindex ==== While = %i"), spawnlocalindex);
+		//UE_LOG(LogTemp, Warning, TEXT("spawnlocalindex ==== While = %i"), spawnlocalindex);
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("spawnlocalindex ==== Out = %i"), spawnlocalindex);
+	//UE_LOG(LogTemp, Warning, TEXT("spawnlocalindex ==== Out = %i"), spawnlocalindex);
 
 	return spawnlocalindex;
 }
@@ -121,7 +121,9 @@ void ATile::GenerateSpawnActor_RandomLocation(TSubclassOf<AActor> ToSpawn, FVect
 
 void ATile::DestroySpawnActors()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Destroy Spawn Actors === Garbage = %i"), GarbageObject.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("Destroy Spawn Actors === Garbage = %i"), GarbageObject.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("ActorName = %s"), *GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("========================================="));
 	while (GarbageObject.Num() != 0)
 	{
 		AActor* Prop = nullptr;
@@ -178,6 +180,24 @@ void ATile::SpawnActors_TimeLineObjects(TSubclassOf<AActor> ToSpawn, TArray<AAct
 		SpawnActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 
 	}
+
+}
+
+void ATile::SpawnPillars(TSubclassOf<AActor> ToSpawn, TArray<FVector> SpawnLocations)
+{
+
+	for (int32 index = 0; index < SpawnLocations.Num(); index++)
+	{
+		auto SpawnActor = GetWorld()->SpawnActor<AActor>(ToSpawn);
+		if (!ensure(SpawnActor)) return;
+
+		GarbageObject.Add(SpawnActor);
+		SpawnActor->SetActorRelativeLocation(SpawnLocations[index]);
+		SpawnActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+
+	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("GarbagePillarNumber = %i"), GarbageObject.Num());
 
 }
 

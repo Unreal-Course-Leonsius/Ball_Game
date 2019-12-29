@@ -86,4 +86,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Spwan Actor")
 	void SpawnActors_TimeLineObjects(TSubclassOf<AActor>ToSpawn, TArray<AActor*> &SpawnActors, TArray<FVector> SpawnLocations);
 
+	UFUNCTION(BlueprintCallable, Category = "Spwan Actor")
+	void SpawnPillars(TSubclassOf<AActor>ToSpawn, TArray<FVector> SpawnLocations);
+
 };

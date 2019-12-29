@@ -35,7 +35,10 @@ private:
 	/** Indicates whether we can currently jump, use to prevent double jumping */
 	bool bCanJump;
 
+protected:
+
 	/** Indicates whether we can use MoveForward() Function */
+	UPROPERTY()
 	bool bCanMoveForward;
 
 private:
@@ -64,11 +67,23 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")
 	float MaxMoveForce;
 
+	UPROPERTY()
+	FVector JumpMoveDestination;
+
+	FRotator MyControlRotator;
+	//FVector ChangeLocation;
+
+protected:
+
+
 private:
 
 	void SimulateMove(float DeltaTime);
-	void UpdateLocation(FVector direction, FVector worldDirection, float DeltaTime);
+	void UpdateLocation(FVector worldDirection, FVector torque, float DeltaTime);
+	void UpdateRotation(float DeltaTime);
 	//void GetAirResistance();
+
+	void MoveAfterJump();
 
 protected:
 
@@ -78,6 +93,8 @@ protected:
 
 	/** Called for side to side input */
 	void MoveRight(float Val);
+
+
 
 	/** Called to move ball forwards and backwards */
 	void MoveForward(float Val);
@@ -101,13 +118,13 @@ protected:
 
 	/// Rotator Transform Vectors
 	/** FRotator Transform ForwardVector */
-	FVector GetForwardVector(FRotator InRot);
+	FVector GetForwardVector_Roll(FRotator InRot);
 
 	/** FRotator Transform UpVector*/
-	FVector GetMyUpVector(FRotator InRot);
+	FVector GetUpVector_Yaw(FRotator InRot);
 
 	/** FRotator Transform Right Vector*/
-	FVector GetMyRightVector(FRotator InRot);
+	FVector GetRightVector_Pitch(FRotator InRot);
 
 
 	void GetNotifyHitName(AActor* HitActorr);
@@ -135,6 +152,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ForceApply();
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetJumpMoveDestination(FVector Destination);
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetMoveForward(bool bValue);
 
 
 public:	
