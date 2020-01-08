@@ -39,4 +39,8 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Tile")
 	void EventFromBeginPlay();
 
+private:
+
+	int32 LastTileIndex;
+
 };

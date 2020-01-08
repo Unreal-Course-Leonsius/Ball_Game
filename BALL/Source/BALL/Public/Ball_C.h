@@ -29,42 +29,50 @@ private:
 
 	float InputForward;
 	float InputRight;
+	float ForwardForce;
 
-	float Velocity = 0;
+private:
+
+	/// No more needs this properties
+	//float Velocity = 0;
 
 	/** Indicates whether we can currently jump, use to prevent double jumping */
-	bool bCanJump;
+	//bool bCanJump;
 
 protected:
 
 	/** Indicates whether we can use MoveForward() Function */
-	UPROPERTY()
-	bool bCanMoveForward;
+	//UPROPERTY()
+	//bool bCanMoveForward;
 
 private:
+
+	/** MoveRight MoveForward Speed */
+	/*
+	UPROPERTY(EditDefaultsOnly, Category = "Ball")
+	float MoveForwardVector;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")
 	float Mass = 100;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float DragCoefficient = 60;
+	float DragCoefficient = 60;*/
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
+	float MoveRightVector;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
+	float RotationSpeed;
 
 	/** Torque to apply when trying to roll ball */
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
+	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float RollTorque;
 
 	/** Vertical impulse to apply when pressing jump */
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
+	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float JumpImpulse;
 
-	/** MoveRight MoveForward Speed */
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float MoveRightVector;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float MoveForwardVector;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
+	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float MaxMoveForce;
 
 	UPROPERTY()
@@ -81,9 +89,8 @@ private:
 	void SimulateMove(float DeltaTime);
 	void UpdateLocation(FVector worldDirection, FVector torque, float DeltaTime);
 	void UpdateRotation(float DeltaTime);
-	//void GetAirResistance();
 
-	void MoveAfterJump();
+	//void MoveAfterJump();
 
 protected:
 
@@ -152,11 +159,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ForceApply();
 
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetJumpMoveDestination(FVector Destination);
+	/*UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetJumpMoveDestination(FVector Destination);*/
 
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetMoveForward(bool bValue);
+	/*UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetMoveForward(bool bValue);*/
 
 
 public:	

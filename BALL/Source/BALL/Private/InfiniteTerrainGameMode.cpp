@@ -18,7 +18,7 @@ void AInfiniteTerrainGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//GenerateTiles();
+	GenerateTiles();
 	//UE_LOG(LogTemp, Warning, TEXT("GameMode BeginPlay C++"));
 
 }
@@ -33,6 +33,7 @@ void AInfiniteTerrainGameMode::GenerateTiles()
 		ATile *Prop = GetWorld()->SpawnActor<ATile>(TileBlueprints[i], TileLocation);
 		//UE_LOG(LogTemp, Warning, TEXT("Tile Name = %s;    GetNextTilePoint = %s"), *Prop->GetName(), *Prop->GetNextTilePoint().GetLocation().ToString());
 		TileLocation = Prop->GetNextTilePoint();
+		LastTileIndex = i;
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("tilenumber = %i"), TileBlueprints.Num());
@@ -41,11 +42,30 @@ void AInfiniteTerrainGameMode::GenerateTiles()
 
 void AInfiniteTerrainGameMode::SpawnTile()
 {
-	int32 index = FMath::RandRange(0.0, (float)TileBlueprints.Num());
+	int32 index;
+	if (LastTileIndex == 8)
+	{
+		bool bRightIndex = false;
+		do
+		{
+			index = FMath::RandRange(0.0, (float)TileBlueprints.Num());
+			if (index != 8 && index != 7 && index != 6)
+				bRightIndex = true;
+		
+		} 
+		while (!bRightIndex);
+		
+	}
+	else
+	{
+		index = FMath::RandRange(0.0, (float)TileBlueprints.Num());
+	}
+
 	//UE_LOG(LogTemp, Warning, TEXT("======================= SpawnTile Function ======================="));
 	if (TileBlueprints.Num() == 0) { return; }
 	ATile* Prop = GetWorld()->SpawnActor<ATile>(TileBlueprints[index], TileLocation);
 	TileLocation = Prop->GetNextTilePoint();
+	LastTileIndex = index;
 	//UE_LOG(LogTemp, Warning, TEXT("GetNextTilePoint = %s"), *Prop->GetNextTilePoint().GetLocation().ToString());
 	
 }

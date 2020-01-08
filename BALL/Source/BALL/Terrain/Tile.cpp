@@ -178,6 +178,7 @@ void ATile::SpawnActors_TimeLineObjects(TSubclassOf<AActor> ToSpawn, TArray<AAct
 		SpawnActors.Add(SpawnActor);
 		SpawnActor->SetActorRelativeLocation(SpawnLocations[index]);
 		SpawnActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+		//SpawnActor->SetActorHiddenInGame(true);
 
 	}
 
