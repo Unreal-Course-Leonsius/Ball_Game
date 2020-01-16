@@ -4,6 +4,7 @@
 #include "Ball_C.h"
 
 #include "Math/Vector.h"
+#include "Engine/Engine.h"
 
 // Sets default values
 ABall_C::ABall_C()
@@ -17,6 +18,9 @@ ABall_C::ABall_C()
 	MoveRightVector = 2500.f;
 	RotationSpeed = 750;
 	MaxMoveForce = 3000.f;
+
+	/// Move Value
+	InputForward = 1;
 
 	//bCanJump = true; // Start being able to jump
 	//bCanMoveForward = true;
@@ -111,11 +115,11 @@ void ABall_C::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// Mouse Movement
-	PlayerInputComponent->BindAxis("Athimuth", this, &ABall_C::Azimuth);
-	PlayerInputComponent->BindAxis("Elevation", this, &ABall_C::Elevation);
+	/*PlayerInputComponent->BindAxis("Athimuth", this, &ABall_C::Azimuth);
+	PlayerInputComponent->BindAxis("Elevation", this, &ABall_C::Elevation);*/
 
 	// Forwad Backward
-	PlayerInputComponent->BindAxis("WForward_Backward", this, &ABall_C::MoveForward);
+	//PlayerInputComponent->BindAxis("WForward_Backward", this, &ABall_C::MoveForward);
 	PlayerInputComponent->BindAxis("ALeft_DRight", this, &ABall_C::MoveRight);
 
 	// Jump
@@ -277,6 +281,20 @@ void ABall_C::MoveForward(float Val)
 
 void ABall_C::MoveRight(float Val)
 {
+
+	Val = FMath::Clamp<float>(Val, -1.f, 1.f);
+	/*if (Val < 0)
+	{
+		InputRight = -1;
+		return;
+	}
+		
+	if (Val > 0)
+	{
+		InputRight = 1;
+		return;
+	}*/
+		
 	InputRight = Val;
 }
 
@@ -304,8 +322,10 @@ void ABall_C::UpdateRotation(float DeltaTime)
 	//	SetActorLocation(WorldDirection);
 	//	//Ball->SetPhysicsAngularVelocity(Direction, true);
 
+	
 	auto WorldDirection = GetActorLocation();
 	WorldDirection += FVector(0.f, InputRight * DeltaTime * MoveRightVector, 0.f);
+
 
 	/// This is Updated Forwrad and Right Rotation
 	MyControlRotator += FRotator(-InputForward * RotationSpeed * DeltaTime, 0.f, InputRight * RotationSpeed * DeltaTime);
@@ -320,6 +340,11 @@ void ABall_C::UpdateRotation(float DeltaTime)
 
 	Ball->SetRelativeRotation(MyControlRotator);
 	SetActorLocation(WorldDirection);
+	
+	UEngine* Engine = GetGameInstance()->GetEngine();
+	if (!ensure(Engine != nullptr)) return;
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("InputRight = %f"), InputRight));
+	UE_LOG(LogTemp, Error, TEXT("============== Input ================="));
 	
 }
 

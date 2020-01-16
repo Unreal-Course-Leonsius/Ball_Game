@@ -43,6 +43,18 @@ void AInfiniteTerrainGameMode::GenerateTiles()
 void AInfiniteTerrainGameMode::SpawnTile()
 {
 	int32 index;
+	if (LastTileIndex == 7)
+	{
+		bool bRightIndex = false;
+		do
+		{
+			index = FMath::RandRange(0.0, (float)TileBlueprints.Num());
+			if (index != 8)
+				bRightIndex = true;
+
+		} while (!bRightIndex);
+	}
+
 	if (LastTileIndex == 8)
 	{
 		bool bRightIndex = false;
