@@ -59,7 +59,7 @@ private:
 	float DragCoefficient = 60;*/
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
-	float MoveRightVector;
+	float MaxRightForce;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float RotationSpeed;
@@ -73,39 +73,23 @@ private:
 	float JumpImpulse;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
-	float MaxMoveForce;
+	float MaxForwardForce;
 
-	UPROPERTY()
-	FVector JumpMoveDestination;
 
 	FRotator MyControlRotator;
 	//FVector ChangeLocation;
 
-protected:
 
 
 private:
 
-	void SimulateMove(float DeltaTime);
+	/*void SimulateMove(float DeltaTime);
 	void UpdateLocation(FVector worldDirection, FVector torque, float DeltaTime);
-	void UpdateRotation(float DeltaTime);
+	void UpdateRotation(float DeltaTime);*/
 
 	//void MoveAfterJump();
 
 protected:
-
-	/// Function Ability
-	void Azimuth(float Val);
-	void Elevation(float Val);
-
-	/** Called for side to side input */
-	void MoveRight(float Val);
-
-
-
-	/** Called to move ball forwards and backwards */
-	void MoveForward(float Val);
-
 
 
 	// AActor interface
@@ -141,8 +125,18 @@ public:
 	// Sets default values for this pawn's properties
 	ABall_C();
 
-	
+
+	void SetMoveRight(float Val);
+	void SetMoveForward(float Val);
+
+	UPROPERTY(BlueprintAssignable)
 	FBallDelegate OnDeath;
+
+	UStaticMeshComponent * GetBall() { return Ball; }
+	USceneComponent * GetSceneComponent() { return Scene; }
+	USpringArmComponent *GetSpringArmComponent() { return SpringArm; }
+
+
 
 public:
 
@@ -152,9 +146,9 @@ public:
 	/* Put Components Settings */
 	void Setting();
 
-	/** Handle jump action. Be Careful Jump function use Private member of Ball Class */
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void Jump();
+	///** Handle jump action. Be Careful Jump function use Private member of Ball Class */
+	//UFUNCTION(BlueprintCallable, Category = "Setup")
+	//void Jump();
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ForceApply();
@@ -175,8 +169,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+private:
+
+	UPROPERTY(VisibleAnywhere)
+	class UBallMovementComponent * MovementComponent;
+
+	float MaxForwardForce;
 	
 	
 };
