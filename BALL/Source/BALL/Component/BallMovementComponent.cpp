@@ -6,6 +6,7 @@
 #include "../Public/Ball_C.h"
 
 
+
 // Sets default values for this component's properties
 UBallMovementComponent::UBallMovementComponent()
 {
@@ -15,11 +16,13 @@ UBallMovementComponent::UBallMovementComponent()
 
 	// ...
 
-	RollTorque = 500000000.0f;
+	/*RollTorque = 500000000.0f;
 	JumpImpulse = 450000.0f;
 	MaxRightForce = 2500.f;
 	RotationSpeed = 750;
-	MaxForwardForce = 3000.f;
+	MaxForwardForce = 3000.f;*/
+
+	InputForward = 1;
 }
 
 
@@ -31,10 +34,14 @@ void UBallMovementComponent::BeginPlay()
 
 	// ...
 
-	Player = Cast<ABall_C>(GetOwner());
+	//BallPlayer = GetOwner()->FindComponentByClass<UStaticMeshComponent>();
 
 	MyControlRotator = GetOwner()->GetActorRotation();
-	
+
+	UEngine* Engine = GetOwner()->GetGameInstance()->GetEngine();
+	if (!ensure(Engine != nullptr)) return;
+	Engine->AddOnScreenDebugMessage(0, 20, FColor::Green, FString::Printf(TEXT("MovementComponentBeginPlay")));
+	UE_LOG(LogTemp, Warning, TEXT("MovementComponentBeginPlay -- Time = %f"), GetWorld()->GetTimeSeconds());
 }
 
 
@@ -45,7 +52,12 @@ void UBallMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 	// ...
 
-	if (!ensure(Player != nullptr)) return;
+	//if (!ensure(Player != nullptr)) return;
+
+	if (!ensure(BallPlayer != nullptr)) return;
+	SimulateMove(DeltaTime);
+
+	//UE_LOG(LogTemp, Warning, TEXT("TickComponent"));
 }
 
 void UBallMovementComponent::SimulateMove(float DeltaTime)
@@ -84,8 +96,8 @@ void UBallMovementComponent::SimulateMove(float DeltaTime)
 
 
 	/// 4 - More Simply Motion Code
-	const FVector Torque = FVector(0.f, InputForward * RollTorque * DeltaTime, 0.f);
-	auto ChangeLocation = Player->GetActorLocation();
+	const FVector Torque = FVector(0.f, InputForward * Movement_RollTorque * DeltaTime, 0.f);
+	auto ChangeLocation = GetOwner()->GetActorLocation();
 	auto Speed = InputForward * ForwardForce * DeltaTime;
 	FVector Force = FVector(Speed, 0.f, 0.f);
 	ChangeLocation += Force; // Because rotate of Ball, forward vector is not alwayes in suitable scope
@@ -94,16 +106,20 @@ void UBallMovementComponent::SimulateMove(float DeltaTime)
 	UpdateLocation(ChangeLocation, Torque, DeltaTime);
 	UpdateRotation(DeltaTime);
 
+	//UE_LOG(LogTemp, Warning, TEXT("SimulateMove"));
+
 
 }
 
 void UBallMovementComponent::UpdateLocation(FVector worldDirection, FVector torque, float DeltaTime)
 {
 
-	Player->SetActorLocation(worldDirection);
-	Player->GetBall()->AddTorque(torque);
+	GetOwner()->SetActorLocation(worldDirection);
+	BallPlayer->AddTorque(torque);
 
 	//AddActorWorldOffset(Translation, true);
+
+	//UE_LOG(LogTemp, Warning, TEXT("UpdateLocation"));
 
 }
 
@@ -131,14 +147,14 @@ void UBallMovementComponent::UpdateRotation(float DeltaTime)
 	//	//Ball->SetPhysicsAngularVelocity(Direction, true);
 
 
-	auto WorldDirection = Player->GetActorLocation();
-	WorldDirection += FVector(0.f, InputRight * DeltaTime * MaxRightForce, 0.f);
+	auto WorldDirection = GetOwner()->GetActorLocation();
+	WorldDirection += FVector(0.f, InputRight * DeltaTime * Movement_MaxRightForce, 0.f);
 
 	//UE_LOG(LogTemp, Warning, TEXT("InputRight = %f"), InputRight);
 
 
 	/// This is Updated Forwrad and Right Rotation
-	MyControlRotator += FRotator(-InputForward * RotationSpeed * DeltaTime, 0.f, InputRight * RotationSpeed * DeltaTime);
+	MyControlRotator += FRotator(-InputForward * Movement_RotationSpeed * DeltaTime, 0.f, InputRight * Movement_RotationSpeed * DeltaTime);
 
 	if (FMath::Abs(MyControlRotator.Pitch) > 360)
 		MyControlRotator.Pitch = 0;
@@ -148,13 +164,15 @@ void UBallMovementComponent::UpdateRotation(float DeltaTime)
 
 
 
-	Player->GetBall()->SetRelativeRotation(MyControlRotator);
-	Player->SetActorLocation(WorldDirection);
+	BallPlayer->SetRelativeRotation(MyControlRotator);
+	GetOwner()->SetActorLocation(WorldDirection);
 
 	/*UEngine* Engine = GetGameInstance()->GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("InputRight = %f"), InputRight));
 	UE_LOG(LogTemp, Error, TEXT("============== Input ================="));*/
+
+	//UE_LOG(LogTemp, Warning, TEXT("UpdateRotation"));
 
 }
 
@@ -163,12 +181,26 @@ void UBallMovementComponent::UpdateRotation(float DeltaTime)
 void UBallMovementComponent::Jump()
 {
 
-	ForwardForce = 450;
-	const FVector Impulse = FVector(0.f, 0.f, JumpImpulse);
-	Player->GetBall()->AddImpulse(Impulse);
+	ForwardForce = MinForwardForce;
+	const FVector Impulse = FVector(0.f, 0.f, Movement_JumpImpulse);
+	BallPlayer->AddImpulse(Impulse);
 	//bCanJump = false;
 
-	UE_LOG(LogTemp, Error, TEXT("JumpImpulse = %f, ForwardForce = %f"), JumpImpulse, ForwardForce);
+	UE_LOG(LogTemp, Error, TEXT("JumpImpulse = %f, ForwardForce = %f"), Movement_JumpImpulse, ForwardForce);
 
+}
+
+void UBallMovementComponent::ImpactBallPlayer(FVector Impulse)
+{
+	BallPlayer->AddImpulse(Impulse);
+}
+
+void UBallMovementComponent::SetMovementProperty(float rolltorque, float jumpimpulse, float maxrightforce, float rotationspeed, float maxforwardforce)
+{
+	Movement_MaxRightForce = maxrightforce;
+	Movement_RotationSpeed = rotationspeed;
+	Movement_RollTorque = rolltorque;
+	Movement_JumpImpulse = jumpimpulse;
+	Movement_MaxForwardForce = maxforwardforce;
 }
 

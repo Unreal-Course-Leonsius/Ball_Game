@@ -3,23 +3,23 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "PlayerInputComponent.generated.h"
+#include "../Public/Ball_C.h"
+#include "BallInputComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BALL_API UPlayerInputComponent : public UActorComponent
+class BALL_API UBallInputComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UPlayerInputComponent();
-
+	UBallInputComponent();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -40,5 +40,5 @@ private:
 
 	UInputComponent* InputComponent = nullptr;
 	class ABall_C * Player = nullptr;
-	
+
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Blueprint/UserWidget.h"
+#include "../Public/Ball_C.h"
 #include "Input.generated.h"
 
 /**

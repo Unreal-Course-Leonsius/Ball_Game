@@ -16,14 +16,18 @@ public:
 	UBallMovementComponent();
 
 	void SetForwardForce(float Force) { ForwardForce = Force; }
-	float GetMaxForwardForce() { return MaxForwardForce; }
 
 	void SetInputForward(float input) { InputForward = input; }
 	void SetInputRight(float input) { InputRight = input; }
 
+	void SetBallPlayer(UStaticMeshComponent * Ball) { BallPlayer = Ball; }
+
 	///** Handle jump action. Be Careful Jump function use Private member of Ball Class */
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Jump();
+
+	void ImpactBallPlayer(FVector Impulse);
+	void SetMovementProperty(float rolltorque, float jumpimpulse, float maxrightforce, float rotationspeed, float maxforwardforce);
 
 protected:
 	// Called when the game starts
@@ -42,30 +46,24 @@ private:
 
 private:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
-	float MaxRightForce;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
-	float RotationSpeed;
+	
+	float Movement_MaxRightForce;
+	float Movement_RotationSpeed;
 
 	/** Torque to apply when trying to roll ball */
-	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
-	float RollTorque;
+	float Movement_RollTorque;
 
 	/** Vertical impulse to apply when pressing jump */
-	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
-	float JumpImpulse;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
-	float MaxForwardForce;
+	float Movement_JumpImpulse;
+	float Movement_MaxForwardForce;
 
 
 	float InputForward;
 	float InputRight;
 	float ForwardForce;
+	float MinForwardForce = 450;
 
 	FRotator MyControlRotator;
-
-	class ABall_C * Player;
+	UStaticMeshComponent *BallPlayer;
 	
 };

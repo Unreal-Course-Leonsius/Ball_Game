@@ -147,8 +147,8 @@ public:
 	void Setting();
 
 	///** Handle jump action. Be Careful Jump function use Private member of Ball Class */
-	//UFUNCTION(BlueprintCallable, Category = "Setup")
-	//void Jump();
+	/*UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Jump();*/
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ForceApply();
@@ -174,9 +174,18 @@ public:
 private:
 
 	UPROPERTY(VisibleAnywhere)
-	class UBallMovementComponent * MovementComponent;
+	class UBallMovementComponent * MyMovementComponent;
+	UPROPERTY(VisibleAnywhere)
+	class UBallInputComponent * MyInputComponent;
 
-	float MaxForwardForce;
+
+	float MaxForce;
 	
 	
 };
+
+
+
+/// Old Code
+
+

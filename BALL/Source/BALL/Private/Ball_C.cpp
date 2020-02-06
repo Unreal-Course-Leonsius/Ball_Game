@@ -6,6 +6,7 @@
 #include "Math/Vector.h"
 #include "Engine/Engine.h"
 #include "Component/BallMovementComponent.h"
+#include "Component/BallInputComponent.h"
 
 // Sets default values
 ABall_C::ABall_C()
@@ -14,13 +15,15 @@ ABall_C::ABall_C()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Initialize Vairables
-	RollTorque = 500000000.0f;
-	JumpImpulse = 450000.0f;
+	RollTorque = 5000000.0f;
+	JumpImpulse = 180000.0f;
 	MaxRightForce = 2500.f;
 	RotationSpeed = 750;
 	MaxForwardForce = 3000.f;
 
-	MovementComponent = CreateDefaultSubobject<UBallMovementComponent>(TEXT("MovementComponent"));
+	MyMovementComponent = CreateDefaultSubobject<UBallMovementComponent>(TEXT("MovementComponent"));
+
+	MyInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("InputComponent"));
 
 	/// Move Value
 	//InputForward = 1;
@@ -41,6 +44,8 @@ void ABall_C::Initialize(UStaticMeshComponent * ball, USceneComponent * scene, U
 	Camera = camera;
 
 	Setting();
+
+	MyMovementComponent->SetBallPlayer(ball);
 }
 
 void ABall_C::Setting()
@@ -62,8 +67,15 @@ void ABall_C::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MaxForwardForce = MovementComponent->GetMaxForwardForce();
+
+	if (!ensure(MyMovementComponent != nullptr)) return;
+	MyMovementComponent->SetMovementProperty(RollTorque, JumpImpulse, MaxRightForce, RotationSpeed, MaxForwardForce);
 	//MyControlRotator = GetActorRotation();
+
+	/*UEngine* Engine = GetGameInstance()->GetEngine();
+	if (!ensure(Engine != nullptr)) return;
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Ball_C_BeginPlay")));
+	UE_LOG(LogTemp, Warning, TEXT("Ball_C_BeginPlay -- Time = %f"), GetWorld()->GetTimeSeconds());*/
 
 }
 
@@ -75,7 +87,7 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 
 	if (OtherComp->GetName() == "Ground")
 	{
-		ForwardForce = MaxForwardForce;
+		MyMovementComponent->SetForwardForce(MaxForwardForce);
 	}
 	else
 	{
@@ -95,7 +107,7 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 		
 		auto TagName = ArrayTags[0];
 		UE_LOG(LogTemp, Warning, TEXT("TagArray = %s"), *TagName.ToString());
-		MovementComponent->Jump();
+		MyMovementComponent->Jump();
 	}
 
 	auto arrowComponent = HitActor->FindComponentByClass<UArrowComponent>();
@@ -104,16 +116,16 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 	if (arrowComponent == nullptr && ArrayTags.Num() <= 0)
 	{
 		GetNotifyHitName(HitActor);
-		InputForward = 0;
-		Ball->AddImpulse(FVector(0.f, JumpImpulse, 0.f));
+		MyMovementComponent->SetInputForward(0);
+		MyMovementComponent->ImpactBallPlayer(FVector(0.f, JumpImpulse, 0.f));
 		OnDeath.Broadcast();
 
-		UEngine* Engine = GetGameInstance()->GetEngine();
-		if (!ensure(Engine != nullptr)) return;
-		Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Death Event")));
-		
-		//Death();
-		UE_LOG(LogTemp, Warning, TEXT("===== Death ====="));
+		//UEngine* Engine = GetGameInstance()->GetEngine();
+		//if (!ensure(Engine != nullptr)) return;
+		//Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Death Event")));
+		//
+		////Death();
+		//UE_LOG(LogTemp, Warning, TEXT("===== Death ====="));
 		
 	}
 	
@@ -180,7 +192,7 @@ void ABall_C::Tick(float DeltaTime)
 	);*/
 
 
-	//SimulateMove(DeltaTime);
+	///SimulateMove(DeltaTime);
 
 	
 
@@ -245,7 +257,7 @@ void ABall_C::Tick(float DeltaTime)
 //	//AddActorWorldOffset(Translation, true);
 //
 //}
-
+//
 //void ABall_C::UpdateRotation(float DeltaTime)
 //{
 //
@@ -326,7 +338,7 @@ void ABall_C::ForceApply()
 
 void ABall_C::SetMoveForward(float Val)
 {
-	InputForward = Val;
+	MyMovementComponent->SetInputForward(Val);
 }
 
 void ABall_C::SetMoveRight(float Val)
@@ -345,7 +357,7 @@ void ABall_C::SetMoveRight(float Val)
 		return;
 	}*/
 		
-	InputRight = Val;
+	MyMovementComponent->SetInputRight(Val);
 }
 
 
@@ -461,4 +473,9 @@ void ABall_C::GetNotifyHitName(AActor* HitActorr)
 {
 
 }*/
+
+
+
+/// Old Code
+
 
