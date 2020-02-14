@@ -30,6 +30,7 @@ private:
 	float InputForward;
 	float InputRight;
 	float ForwardForce;
+	float ChangeForce = 200;
 
 private:
 
@@ -75,6 +76,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float MaxForwardForce;
 
+	UPROPERTY(VisibleAnywhere)
+	class UBallInputComponent * MyInputComponent;
+
+	class AInfiniteTerrainGameMode * GameMode;
+
 
 	FRotator MyControlRotator;
 	//FVector ChangeLocation;
@@ -83,11 +89,12 @@ private:
 
 private:
 
-	/*void SimulateMove(float DeltaTime);
+	void SimulateMove(float DeltaTime);
 	void UpdateLocation(FVector worldDirection, FVector torque, float DeltaTime);
-	void UpdateRotation(float DeltaTime);*/
+	void UpdateRotation(float DeltaTime);
 
-	//void MoveAfterJump();
+	UFUNCTION()
+	void IncreaseMaxForwardForce();
 
 protected:
 
@@ -133,6 +140,8 @@ public:
 	FBallDelegate OnDeath;
 
 	UStaticMeshComponent * GetBall() { return Ball; }
+
+	/// Use LookAround Component
 	USceneComponent * GetSceneComponent() { return Scene; }
 	USpringArmComponent *GetSpringArmComponent() { return SpringArm; }
 
@@ -147,8 +156,8 @@ public:
 	void Setting();
 
 	///** Handle jump action. Be Careful Jump function use Private member of Ball Class */
-	/*UFUNCTION(BlueprintCallable, Category = "Setup")
-	void Jump();*/
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Jump();
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ForceApply();
@@ -171,21 +180,9 @@ public:
 	// Called to bind functionality to input
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
-
-	UPROPERTY(VisibleAnywhere)
-	class UBallMovementComponent * MyMovementComponent;
-	UPROPERTY(VisibleAnywhere)
-	class UBallInputComponent * MyInputComponent;
-
-
-	float MaxForce;
-	
 	
 };
 
 
-
-/// Old Code
 
 

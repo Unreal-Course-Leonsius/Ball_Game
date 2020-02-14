@@ -3,9 +3,14 @@
 #include "Components/ArrowComponent.h"
 #include "UObject/UObjectGlobals.h"
 #include "Tile.h"
+#include "../Public/InfiniteTerrainGameMode.h"
 
 
 #define OUT
+
+//int32 ATile::TileNumber = 0;
+//int32 ATile::GetTileNumber() { return TileNumber; }
+//void ATile::SetTileNumverZero() { TileNumber = 0; }
 
 
 // Sets default values
@@ -28,6 +33,8 @@ ATile::ATile(const FObjectInitializer& ObjectInitializer)
 	ArrowComponent->SetRelativeLocation(ArrowLocation);  // Set location relative to the world
 	// ArrowComponent->AddRelativeLocation(FVector(3000, 0, -50));
 
+	//++TileNumber;
+
 }
 
 // Called when the game starts or when spawned
@@ -36,8 +43,22 @@ void ATile::BeginPlay()
 	Super::BeginPlay();
 	//UE_LOG(LogTemp, Warning, TEXT("Tile BeginPlay C++"));
 
+	GameMode = Cast<AInfiniteTerrainGameMode>(GetWorld()->GetAuthGameMode());
+	if (!ensure(GameMode != nullptr)) return;
+
+	GameMode->IncreaseSpeed.AddUniqueDynamic(this, &ATile::ChangeSpeed);
 	
 }
+
+void ATile::ChangeSpeed()
+{
+	if (GrowingWallSpeed <= 3.f)
+		++GrowingWallSpeed;
+
+	if (DropWallTime > 0.05)
+		DropWallTime -= 0.02;
+}
+
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
@@ -119,6 +140,7 @@ void ATile::GenerateSpawnActor_RandomLocation(TSubclassOf<AActor> ToSpawn, FVect
 	return;
 
 }
+
 
 void ATile::DestroySpawnActors()
 {

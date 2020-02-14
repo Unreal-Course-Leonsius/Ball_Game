@@ -25,8 +25,10 @@ void AInfiniteTerrainGameMode::BeginPlay()
 
 void AInfiniteTerrainGameMode::GenerateTiles()
 {
+	//ATile::SetTileNumverZero();
 
-	//UE_LOG(LogTemp, Warning, TEXT("GenerateTiles Function ======================="));
+	TileCounter = 0;
+
 	for (int32 i = 0; i < 4; i++)
 	{
 		if (TileBlueprints.Num() == 0) { return; }
@@ -34,9 +36,28 @@ void AInfiniteTerrainGameMode::GenerateTiles()
 		//UE_LOG(LogTemp, Warning, TEXT("Tile Name = %s;    GetNextTilePoint = %s"), *Prop->GetName(), *Prop->GetNextTilePoint().GetLocation().ToString());
 		TileLocation = Prop->GetNextTilePoint();
 		LastTileIndex = i;
+		++TileCounter;
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("tilenumber = %i"), TileBlueprints.Num());
+
+}
+
+void AInfiniteTerrainGameMode::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	Timer += DeltaTime;
+	if (Timer > 10.f)
+		bCanIncreaseSpeed = true;
+
+	if (TileCounter % 20 == 0 && bCanIncreaseSpeed)
+	{
+		IncreaseSpeed.Broadcast();
+		bCanIncreaseSpeed = false;
+		Timer = 0;
+		UE_LOG(LogTemp, Warning, TEXT("InfiniteGameMode BroadCast"));
+	}
 
 }
 
@@ -78,6 +99,9 @@ void AInfiniteTerrainGameMode::SpawnTile()
 	ATile* Prop = GetWorld()->SpawnActor<ATile>(TileBlueprints[index], TileLocation);
 	TileLocation = Prop->GetNextTilePoint();
 	LastTileIndex = index;
+
+	++TileCounter;
+	UE_LOG(LogTemp, Warning, TEXT("TileNumber = %i"), TileCounter);
 	//UE_LOG(LogTemp, Warning, TEXT("GetNextTilePoint = %s"), *Prop->GetNextTilePoint().GetLocation().ToString());
 	
 }

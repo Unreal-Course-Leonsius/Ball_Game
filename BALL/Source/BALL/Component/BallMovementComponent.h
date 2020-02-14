@@ -15,19 +15,19 @@ public:
 	// Sets default values for this component's properties
 	UBallMovementComponent();
 
-	void SetForwardForce(float Force) { ForwardForce = Force; }
+	//void SetForwardForce(float Force) { ForwardForce = Force; }
 
-	void SetInputForward(float input) { InputForward = input; }
-	void SetInputRight(float input) { InputRight = input; }
+	//void SetInputForward(float input) { InputForward = input; }
+	//void SetInputRight(float input) { InputRight = input; }
 
-	void SetBallPlayer(UStaticMeshComponent * Ball) { BallPlayer = Ball; }
+	//void SetBallPlayer(UStaticMeshComponent * Ball) { BallPlayer = Ball; }
 
 	///** Handle jump action. Be Careful Jump function use Private member of Ball Class */
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void Jump();
+	//UFUNCTION(BlueprintCallable, Category = "Setup")
+	//void Jump();
 
-	void ImpactBallPlayer(FVector Impulse);
-	void SetMovementProperty(float rolltorque, float jumpimpulse, float maxrightforce, float rotationspeed, float maxforwardforce);
+	//void ImpactBallPlayer(FVector Impulse);
+	//void SetMovementProperty(float rolltorque, float jumpimpulse, float maxrightforce, float rotationspeed, float maxforwardforce);
 
 protected:
 	// Called when the game starts
@@ -39,31 +39,31 @@ public:
 
 private:
 
-	void UpdateLocation(FVector worldDirection, FVector torque, float DeltaTime);
-	void UpdateRotation(float DeltaTime);
+	//void UpdateLocation(FVector worldDirection, FVector torque, float DeltaTime);
+	//void UpdateRotation(float DeltaTime);
 
-	void SimulateMove(float DeltaTime);
+	//void SimulateMove(float DeltaTime);
 
 private:
 
 	
-	float Movement_MaxRightForce;
-	float Movement_RotationSpeed;
+	//float Movement_MaxRightForce;
+	//float Movement_RotationSpeed;
 
-	/** Torque to apply when trying to roll ball */
-	float Movement_RollTorque;
+	///** Torque to apply when trying to roll ball */
+	//float Movement_RollTorque;
 
-	/** Vertical impulse to apply when pressing jump */
-	float Movement_JumpImpulse;
-	float Movement_MaxForwardForce;
+	///** Vertical impulse to apply when pressing jump */
+	//float Movement_JumpImpulse;
+	//float Movement_MaxForwardForce;
 
 
-	float InputForward;
-	float InputRight;
-	float ForwardForce;
-	float MinForwardForce = 450;
+	//float InputForward;
+	//float InputRight;
+	//float ForwardForce;
+	//float MinForwardForce = 450;
 
-	FRotator MyControlRotator;
-	UStaticMeshComponent *BallPlayer;
+	//FRotator MyControlRotator;
+	//UStaticMeshComponent *BallPlayer;
 	
 };

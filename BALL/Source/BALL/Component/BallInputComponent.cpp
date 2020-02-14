@@ -42,14 +42,12 @@ void UBallInputComponent::SetupInputComponent()
 	if (InputComponent)
 	{
 		/// Bind Input axis
-		//InputComponent->BindAxis("WForward_Backward", this, &UBallInputComponent::MoveForward);
+		InputComponent->BindAxis("WForward_Backward", this, &UBallInputComponent::MoveForward);
 		InputComponent->BindAxis("ALeft_DRight", this, &UBallInputComponent::MoveRight);
-		UE_LOG(LogTemp, Error, TEXT("%s - has Component InputComponent..."), *GetOwner()->GetName())
+		InputComponent->BindAction("Jump", IE_Pressed, this, &UBallInputComponent::PlayerJump);
+		UE_LOG(LogTemp, Error, TEXT("%s - has Component InputComponent..."), *GetOwner()->GetName());
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s - has not Component InputComponent..."), *GetOwner()->GetName())
-	}
+
 }
 
 
@@ -63,3 +61,7 @@ void UBallInputComponent::MoveForward(float Val)
 	Player->SetMoveForward(Val);
 }
 
+void UBallInputComponent::PlayerJump()
+{
+	Player->Jump();
+}

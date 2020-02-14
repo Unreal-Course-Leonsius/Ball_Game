@@ -36,6 +36,8 @@ public:
 	/** Called to move ball forwards and backwards */
 	void MoveForward(float Val);
 
+	void PlayerJump();
+
 private:
 
 	UInputComponent* InputComponent = nullptr;

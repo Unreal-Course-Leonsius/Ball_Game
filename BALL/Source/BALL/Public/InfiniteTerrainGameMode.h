@@ -5,6 +5,8 @@
 #include "BALLGameModeBase.h"
 #include "InfiniteTerrainGameMode.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FChangeSpeed);
+
 /**
  * 
  */
@@ -16,6 +18,11 @@ class BALL_API AInfiniteTerrainGameMode : public ABALLGameModeBase
 public:
 
 	AInfiniteTerrainGameMode();
+
+public:
+
+	UPROPERTY(BlueprintAssignable)
+	FChangeSpeed IncreaseSpeed;
 	
 	
 protected:
@@ -30,6 +37,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaTime) override;
+
 	void GenerateTiles();
 
 
@@ -42,5 +51,9 @@ protected:
 private:
 
 	int32 LastTileIndex;
+
+	bool bCanIncreaseSpeed = false;
+	float Timer = 0;
+	int32 TileCounter = 0;
 
 };

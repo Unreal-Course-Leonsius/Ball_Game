@@ -20,6 +20,15 @@ private:
 	int32 maxSpawnNumber = 0; // for Spawn Actor
 	int32 indexLocation = 0; // for Spawn Actor's LocatonArray
 
+	///
+	//static int32 TileNumber;
+
+	///
+	class AInfiniteTerrainGameMode * GameMode;
+
+	float GrowingWallSpeed = 1;
+	float DropWallTime = 0.1;
+
 private:
 
 	int32 SetUniqueIndext(int32 MaxRange, TArray<bool> &IsTheLocationFree);
@@ -27,6 +36,9 @@ private:
 	void FillBoolArray(TArray<bool> &IsTheLocationFree, int32 length);
 
 	void GenerateSpawnActor_RandomLocation(TSubclassOf<AActor>ToSpawn, FVector SpawnLocation);
+
+	UFUNCTION()
+	void ChangeSpeed();
 	
 public:	
 
@@ -35,6 +47,16 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	/// Change Speed BP_DropWallTile & BP_GrowingWallTile
+	UFUNCTION(BlueprintCallable, Category = "Speed")
+	float GetGrowingWallSpeed() { return GrowingWallSpeed; }
+	UFUNCTION(BlueprintCallable, Category = "Speed")
+	float GetDropWallTime() { return DropWallTime; }
+
+	/// Count generate Tiles
+	/*static int32 GetTileNumber();
+	static void SetTileNumverZero();*/
 
 protected:
 	// Called when the game starts or when spawned
