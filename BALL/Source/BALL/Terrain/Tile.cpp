@@ -231,16 +231,6 @@ void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//UE_LOG(LogTemp, Warning, TEXT("Delta Time = %f"), GetWorld()->GetTimeSeconds());
-
-	/*for (int i = 0; i < 5; i++)
-	{
-		float delayTime = GetWorld()->GetTimeSeconds();
-		if (delayTime > 2.f)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Delta Time = %f"), GetWorld()->GetTimeSeconds());
-		}
-	}*/
-
+	
 }
 

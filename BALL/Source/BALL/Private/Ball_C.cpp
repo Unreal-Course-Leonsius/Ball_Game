@@ -130,99 +130,15 @@ void ABall_C::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//UE_LOG(LogTemp, Warning, TEXT("UPvector = %s"), *GetActorUpVector().ToString());
-
-	//DrawDebugLine
-	//(
-	//	GetWorld(),
-	//	GetActorLocation() + FVector(0,0,50.f),
-	//	GetActorLocation() + (GetActorForwardVector() * 1000),
-	//	FColor(255, 0, 0),
-	//	false,
-	//	0.f,
-	//	0.f,
-	//	5.f
-	//);
-
-	//DrawDebugLine
-	//(
-	//	GetWorld(),
-	//	GetActorLocation() + FVector(0, 0, 50.f),
-	//	GetVelocity(),
-	//	FColor(0, 0, 255),
-	//	false,
-	//	0.f,
-	//	0.f,
-	//	5.f
-	//);
-
-
-
-	//DrawDebugLine
-	//(
-	//	GetWorld(),
-	//	Force + FVector(0, 0, 50.f), //GetActorLocation() + FVector(100.f, 0, 50.f),
-	//	GetActorLocation() - FVector(100.f, 0, 0),
-	//	FColor(0, 255, 0),
-	//	false,
-	//	0.f,
-	//	0.f,
-	//	5.f
-	//);
-
-	/*DrawDebugLine
-	(
-		GetWorld(),
-		GetActorLocation() + FVector(0, 0, 50.f),
-		GetActorLocation() + GetActorRotation().Vector() * 1000,
-		FColor(0, 255, 0),
-		false,
-		0.f,
-		0.f,
-		5.f
-	);*/
-
 
 	SimulateMove(DeltaTime);
-
-	
 
 }
 
 
 void ABall_C::SimulateMove(float DeltaTime)
 {
-	/// 1 - First Version We need not it
-	//const FVector Torque = FVector(0.f, Val * RollTorque, 0.f);
-	//Ball->AddTorque(Torque);	// Ball->AddTorque(Torque, FName(TEXT("None")), true); true means that torque apply no attantion Ball mass it rotate itself
 
-	/// 2 - Second Version We need not it
-	/*auto WorldDirection = GetActorLocation();
-	WorldDirection += FVector(Val * GetWorld()->GetDeltaSeconds() * MoveForward_Backward, 0.f, 0.f);
-	const FVector Torque = FVector(0.f, InputForward * RollTorque * DeltaTime, 0.f);
-	if(bCanActorLocation)
-	{
-		SetActorLocation(WorldDirection);
-			AddActorWorldOffset(Translation, true);
-		Ball->AddTorque(Torque);
-			Ball->SetPhysicsLinearVelocity(Direction, true);
-	}
-	*/
-
-
-	/// 3 - Calculate Acceleration -- No more need it 
-	/*float Force = InputForward * MaxMoveForce;
-	float Acceleration = Force / Mass;
-	Velocity = Velocity + Acceleration * DeltaTime;
-	float Translation = Velocity * 100 * DeltaTime;
-
-	Velocity = FMath::Clamp<float>(Velocity, -30.f, 30.f);
-	Translation = FMath::Clamp<float>(Translation, -25.f, 25.f);*/
-
-	/// Calculate Rotation Direction
-	/*FRotator NewRotator;
-	auto Direction = GetForwardVector_Roll(NewRotator);
-	Direction = Direction * InputForward * 1000 * DeltaTime;*/
 
 
 	/// 4 - More Simply Motion Code
@@ -245,32 +161,11 @@ void ABall_C::UpdateLocation(FVector worldDirection, FVector torque, float Delta
 	SetActorLocation(worldDirection);
 	Ball->AddTorque(torque);
 
-	//AddActorWorldOffset(Translation, true);
 
 }
 
 void ABall_C::UpdateRotation(float DeltaTime)
 {
-
-	/// 1 - First Version We need not this
-	//const FVector Torque = FVector(-1.f * Val * RollTorque, 0.f, 0.f);
-	//Ball->AddTorque(Torque);
-	//auto ForceApply = Ball->GetRightVector() * Val * 5000000; // We need not GetRightVector() because when Ball collide something right and forward vector is messed
-
-	/// 2 - Second Code Version
-	//auto WorldDirection = GetActorLocation();
-	//	UE_LOG(LogTemp, Warning, TEXT("ControlRotation = %s"), *GetControlRotation().ToString());
-	//	WorldDirection += FVector(0.f, Val * GetWorld()->GetDeltaSeconds() * MaxRightForce, 0.f);
-	//
-	//	FRotator ControlRotator = GetControlRotation();
-	//	FRotator NewRotator = FRotator(0.f, 0.f, ControlRotator.Yaw);
-	//	auto Direction = GetRightVector_Pitch(NewRotator);
-	//	Direction = Direction * Val * 10;
-	//
-	//	Ball->SetPhysicsLinearVelocity(Direction, true);
-	////	//Ball->SetWorldRotation(NewRotator * Val * 100000);
-	//	SetActorLocation(WorldDirection);
-	//	//Ball->SetPhysicsAngularVelocity(Direction, true);
 
 
 	auto WorldDirection = GetActorLocation();
@@ -377,8 +272,6 @@ void ABall_C::GetNotifyHitName(AActor* HitActorr)
 
 void ABall_C::ForceApply()
 {
-	//auto velocity = -GetVelocity().Size();
-	//FVector Force = FVector(velocity  * Ball->GetMass() * DragCoefficient * GetWorld()->GetDeltaSeconds(), 0.f, 0.f);
 
 	auto Direction = GetActorRightVector();
 	float DragCoefficient = 6000;
@@ -386,96 +279,7 @@ void ABall_C::ForceApply()
 
 	Ball->AddForce(Force);
 
-	//DrawDebugLine
-	//(
-	//	GetWorld(),
-	//	Force, //GetActorLocation() + FVector(100.f, 0, 50.f),
-	//	GetActorLocation(),
-	//	FColor(0, 255, 0),
-	//	false,
-	//	0.f,
-	//	0.f,
-	//	5.f
-	//);
+
 }
-
-
-/// Remove Functions
-// Called to bind functionality to input
-//void ABall_C::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-//{
-//	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//
-//	// Forwad Backward
-//	//PlayerInputComponent->BindAxis("WForward_Backward", this, &ABall_C::MoveForward);
-//	//PlayerInputComponent->BindAxis("ALeft_DRight", this, &ABall_C::MoveRight);
-//
-//	// Jump
-//	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABall_C::Jump);
-//}
-
-
-//void ABall_C::ForceApply()
-//{
-//
-//	auto BallVelocity = GetVelocity();
-//	auto DeltaTime = GetWorld()->GetDeltaSeconds();
-//
-//	/// Get Vector which is Permentikular of Velocity and Right Vector's
-//	auto ProductUpVector = FVector::CrossProduct(BallVelocity, Ball->GetRightVector());
-//
-//	/// Create Acceleration and it's direction (Vector)
-//	auto Acceleration = -((BallVelocity.X / DeltaTime) * ProductUpVector.GetSafeNormal());
-//
-//	auto BallMass = Ball->GetMass();
-//	Ball->AddForce(Acceleration * BallMass);
-//
-//	/*UE_LOG(LogTemp, Warning, TEXT("ForceApply ------ DeltaTime = %f"), DeltaTime);
-//	UE_LOG(LogTemp, Warning, TEXT("ForceApply ------ BallVelocity = %s"), *BallVelocity.ToString());
-//	UE_LOG(LogTemp, Warning, TEXT("ForceApply ------ ProductUpVector = %s"), *ProductUpVector.ToString());
-//	UE_LOG(LogTemp, Warning, TEXT("ForceApply ------ Acceleration = %s"), *Acceleration.ToString());*/
-//
-//}
-
-///
-//void ABall_C::MoveAfterJump()
-//{
-//
-//	//while (FMath::Abs(GetActorLocation().X) <= FMath::Abs(JumpMoveDestination.X))
-//	//{
-//		FVector LocalworldDirection = GetActorLocation();
-//		LocalworldDirection += FVector(InputForward * GetWorld()->GetDeltaSeconds() * MoveForwardVector, 0.f, 0.f);
-//		SetActorLocation(LocalworldDirection);
-//		Velocity = 0;
-//	//}
-//	
-//	
-//	/*UE_LOG(LogTemp, Warning, TEXT("JumoMoveDestination = %s"), *JumpMoveDestination.ToString());
-//	UE_LOG(LogTemp, Error, TEXT("ActorLocation = %s"), *GetActorLocation().ToString());*/
-//
-//	//JumpMoveDestination = JumpMoveDestination.ZeroVector;
-//}
-
-
-//void ABall_C::SetJumpMoveDestination(FVector Destination)
-//{
-//	JumpMoveDestination = Destination;
-//}
-
-///
-//void ABall_C::SetMoveForward(bool bValue)
-//{
-//	bCanMoveForward = bValue;
-//	//UE_LOG(LogTemp, Error, TEXT("SetMoveForward Function"));
-//}
-
-/*void ABall_C::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-
-}*/
-
-
-
-/// Old Code
 
 

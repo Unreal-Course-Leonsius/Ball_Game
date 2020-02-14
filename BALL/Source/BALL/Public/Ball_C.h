@@ -32,32 +32,9 @@ private:
 	float ForwardForce;
 	float ChangeForce = 200;
 
-private:
-
-	/// No more needs this properties
-	//float Velocity = 0;
-
-	/** Indicates whether we can currently jump, use to prevent double jumping */
-	//bool bCanJump;
-
-protected:
-
-	/** Indicates whether we can use MoveForward() Function */
-	//UPROPERTY()
-	//bool bCanMoveForward;
 
 private:
 
-	/** MoveRight MoveForward Speed */
-	/*
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float MoveForwardVector;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float Mass = 100;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Ball")
-	float DragCoefficient = 60;*/
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float MaxRightForce;
@@ -83,8 +60,6 @@ private:
 
 
 	FRotator MyControlRotator;
-	//FVector ChangeLocation;
-
 
 
 private:
@@ -103,12 +78,6 @@ protected:
 	UFUNCTION()
 	virtual void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
-	// We may Use this Function instead of NotifyHit BECAUSE there was problem about Jump Function()
-	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-	/// nomore need Event we substitution it UnPosses() function in BallPlayerController
-	//UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
-	//void Death();
 
 	AActor * HitActor = nullptr;
 	FString HitActorName;
@@ -162,12 +131,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void ForceApply();
 
-	/*UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetJumpMoveDestination(FVector Destination);*/
-
-	/*UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetMoveForward(bool bValue);*/
-
 
 public:	
 
@@ -177,10 +140,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
 };
 
 
