@@ -23,6 +23,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Right;
 
+public:
+
+	void SetGameUIMode();
+
 protected:
 
 	virtual bool Initialize() override;

@@ -5,6 +5,7 @@
 
 #include "Math/Vector.h"
 #include "Engine/Engine.h"
+
 #include "Component/BallInputComponent.h"
 #include "InfiniteTerrainGameMode.h"
 
@@ -22,13 +23,14 @@ ABall_C::ABall_C()
 	MaxForwardForce = 3000.f;
 
 
-	MyInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("MyInputComponent"));
+	//MyInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("MyInputComponent"));
 
 	/// Move Value
-	//InputForward = 1;
+	InputForward = 1;
 
 	//bCanJump = true; // Start being able to jump
 	//bCanMoveForward = true;
+
 
 	
 }
@@ -85,10 +87,15 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
+	//if (!bStartHit) return;
 
-	if (OtherComp->GetName() == "Ground")
+	HitActor = Hit.GetActor();
+
+	if (OtherComp ->GetName() == "Ground")
 	{
 		ForwardForce = MaxForwardForce;
+		UE_LOG(LogTemp, Warning, TEXT("Ground Condition"));
+
 	}
 	
 	
@@ -103,7 +110,7 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 		//if (TagComponent == nullptr) return;
 		
 		auto TagName = ArrayTags[0];
-		UE_LOG(LogTemp, Warning, TEXT("TagArray = %s"), *TagName.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("TagArray = %s"), *TagName.ToString());
 		Jump();
 	}
 
@@ -113,11 +120,14 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 	if (arrowComponent == nullptr && ArrayTags.Num() <= 0)
 	{
 		GetNotifyHitName(HitActor);
-		//InputForward = 0;
-		//Ball->AddImpulse(FVector(0.f, JumpImpulse, 0.f));
-		//OnDeath.Broadcast();
+		InputForward = 0;
+		Ball->AddImpulse(FVector(0.f, JumpImpulse, 0.f));
+		OnDeath.Broadcast();
+		UE_LOG(LogTemp, Warning, TEXT("Death Event Trigger"));
 
-		
+		UEngine* Engine = GetGameInstance()->GetEngine();
+		if (!ensure(Engine != nullptr)) return;
+		Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Death Event Trigger")));
 	}
 	
 	
@@ -130,6 +140,9 @@ void ABall_C::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	TimeHit += DeltaTime;
+	if (TimeHit > 5)
+		bStartHit = true;
 
 	SimulateMove(DeltaTime);
 
@@ -225,7 +238,7 @@ void ABall_C::SetMoveRight(float Val)
 
 void ABall_C::Jump()
 {
-	
+
 	ForwardForce = 450;
 	const FVector Impulse = FVector(0.f, 0.f, JumpImpulse);
 	Ball->AddImpulse(Impulse);

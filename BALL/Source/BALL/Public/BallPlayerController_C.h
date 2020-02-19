@@ -18,6 +18,8 @@ class BALL_API ABallPlayerController_C : public APlayerController
 	
 public:
 
+	ABallPlayerController_C();
+
 	virtual void BeginPlay() override;
 
 	virtual void SetPawn(APawn* InPawn) override;
@@ -26,5 +28,13 @@ public:
 	
 	UFUNCTION()
 	void OnPossessedBallDeath();
+
+	UFUNCTION(BlueprintCallable, Category = "Widget")
+	void CreateInputWidget();
+
+private:
+
+	TSubclassOf<class UUserWidget> BPInput;
+	class UInput* Input = nullptr;
 	
 };

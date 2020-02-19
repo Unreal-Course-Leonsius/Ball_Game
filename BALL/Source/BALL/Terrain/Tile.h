@@ -23,11 +23,12 @@ private:
 	///
 	//static int32 TileNumber;
 
-	///
+	/// Get GameSpeed
 	class AInfiniteTerrainGameMode * GameMode;
 
+	/// BP_GrowingWallTile & BP_DropWallTile
 	float GrowingWallSpeed = 1;
-	float DropWallTime = 0.1;
+	float DropWallDelationTime = 0.1;
 
 private:
 
@@ -51,8 +52,7 @@ public:
 	/// Change Speed BP_DropWallTile & BP_GrowingWallTile
 	UFUNCTION(BlueprintCallable, Category = "Speed")
 	float GetGrowingWallSpeed() { return GrowingWallSpeed; }
-	UFUNCTION(BlueprintCallable, Category = "Speed")
-	float GetDropWallTime() { return DropWallTime; }
+	
 
 	/// Count generate Tiles
 	/*static int32 GetTileNumber();
@@ -96,7 +96,7 @@ protected:
 	void SpawnActorsRandomLocation(TSubclassOf<AActor>ToSpawn, int32 MinSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations);
 
 	UFUNCTION(BlueprintCallable, Category = "Spwan Actor")
-	void SpawnActorConcretLocation(TSubclassOf<AActor>ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations, float DelationTime);
+	void SpawnActorConcretLocation(TSubclassOf<AActor>ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations);
 
 
 	UFUNCTION(BlueprintCallable, Category = "Spwan Actor")

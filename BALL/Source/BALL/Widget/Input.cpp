@@ -8,12 +8,14 @@
 
 //#include "../Component/PlayerInputComponent.h"
 
-
 bool UInput::Initialize()
 {
 	bool Success = Super::Initialize();
 	if (!Success) return false;
 
+	//GetWorld()->GetFirstPlayerController()->GetControlledPawn();
+
+	
 	Player = Cast<ABall_C>(GetOwningPlayerPawn());
 	if (!ensure(Player != nullptr)) return false;
 
@@ -29,6 +31,24 @@ bool UInput::Initialize()
 	UE_LOG(LogTemp, Warning, TEXT("Widget_Input_C"));
 	return true;
 }
+
+void UInput::SetGameUIMode()
+{
+
+	auto World = GetWorld();
+
+	APlayerController* PlayerController = World->GetFirstPlayerController();
+
+	FInputModeGameAndUI Mode;
+	Mode.SetWidgetToFocus(this->TakeWidget());
+	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(Mode);
+	PlayerController->bShowMouseCursor = true;
+
+	UE_LOG(LogTemp, Warning, TEXT("InputWidget SetGameUIMode Function"));
+
+}
+
 
 void UInput::Left_Direction()
 {

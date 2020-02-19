@@ -25,12 +25,20 @@ private:
 
 	class UCameraComponent* Camera;
 
+	class AInfiniteTerrainGameMode * GameMode;
+	
+
+	FRotator MyControlRotator;
+
 	float DeathTime;
 
 	float InputForward;
 	float InputRight;
 	float ForwardForce;
 	float ChangeForce = 200;
+
+	bool bStartHit = false;
+	float TimeHit = 0.f;
 
 
 private:
@@ -56,10 +64,6 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBallInputComponent * MyInputComponent;
 
-	class AInfiniteTerrainGameMode * GameMode;
-
-
-	FRotator MyControlRotator;
 
 
 private:

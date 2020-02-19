@@ -4,14 +4,59 @@
 #include "Ball_C.h"
 #include "BallPlayerController_C.h"
 
+#include "../Widget/Input.h"
+
+#include "UObject/ConstructorHelpers.h"
+#include "Blueprint/UserWidget.h"
+
+
+
+ABallPlayerController_C::ABallPlayerController_C()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	UE_LOG(LogTemp, Warning, TEXT("PlayerController_Constructor"));
+
+	ConstructorHelpers::FClassFinder<UUserWidget> InputBPClass(TEXT("/Game/Widget/WBP_Input"));
+	if (!ensure(InputBPClass.Class != nullptr)) return;
+
+	BPInput = InputBPClass.Class;
+}
 
 void ABallPlayerController_C::BeginPlay()
 {
 	Super::BeginPlay();
 
 	auto Ball = GetPlayerBall();
-	UE_LOG(LogTemp, Warning, TEXT("Ball Name: %s"), *Ball->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("Ball Name: %s"), *Ball->GetName());
+
+	CreateInputWidget();
+	
 }
+
+void ABallPlayerController_C::CreateInputWidget()
+{
+
+	if (!ensure(BPInput != nullptr)) return;
+	Input = CreateWidget<UInput>(this, BPInput);
+	
+	if (Input != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Input = %s"), *Input->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Input = NULL"));
+	}
+		
+
+	//bShowMouseCursor = true;
+
+	Input->SetGameUIMode();
+	Input->AddToViewport();
+	UE_LOG(LogTemp, Warning, TEXT("PlayerController_BeginPlay_BP"));
+}
+
 
 void ABallPlayerController_C::SetPawn(APawn * InPawn)
 {

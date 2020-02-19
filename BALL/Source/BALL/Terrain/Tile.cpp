@@ -55,8 +55,10 @@ void ATile::ChangeSpeed()
 	if (GrowingWallSpeed <= 3.f)
 		++GrowingWallSpeed;
 
-	if (DropWallTime > 0.05)
-		DropWallTime -= 0.02;
+	if (DropWallDelationTime > 0.05)
+		DropWallDelationTime -= 0.02;
+
+	UE_LOG(LogTemp, Warning, TEXT("GrowingWallSpeed = %f   DropWallDelationTime = %f"), GrowingWallSpeed, DropWallDelationTime);
 }
 
 
@@ -155,7 +157,7 @@ void ATile::DestroySpawnActors()
 	}
 }
 
-void ATile::SpawnActorConcretLocation(TSubclassOf<AActor> ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations, float DelationTime)
+void ATile::SpawnActorConcretLocation(TSubclassOf<AActor> ToSpawn, int32 MaxSpawn, TArray<FVector> SpawnLocations)
 {
 	maxSpawnNumber = MaxSpawn;
 	indexLocation = 0;
@@ -163,7 +165,7 @@ void ATile::SpawnActorConcretLocation(TSubclassOf<AActor> ToSpawn, int32 MaxSpaw
 	//UE_LOG(LogTemp, Warning, TEXT("SpawnActorConcretLocatoin ======================"));
 	TimerDel.BindUFunction(this, FName("GenerateSpawnActor_ConcretLocation"), ToSpawn, SpawnLocations);
 	//AActor* Spawn = GenerateSpawnActor(ToSpawn, SpawnLocations[i]);
-	GetWorld()->GetTimerManager().SetTimer(Timer, TimerDel, DelationTime, true);
+	GetWorld()->GetTimerManager().SetTimer(Timer, TimerDel, DropWallDelationTime, true);
 	//GarbageObject.Add(Spawn);
 
 	return;
@@ -171,7 +173,7 @@ void ATile::SpawnActorConcretLocation(TSubclassOf<AActor> ToSpawn, int32 MaxSpaw
 
 void ATile::GenerateSpawnActor_ConcretLocation(TSubclassOf<AActor> ToSpawn, TArray<FVector> SpawnLocation)
 {
-	UE_LOG(LogTemp, Warning, TEXT("==================== GenerateSpawnActor_ConcretLocatoin ======================"));
+	//UE_LOG(LogTemp, Warning, TEXT("==================== GenerateSpawnActor_ConcretLocatoin ======================"));
 
 	if (indexLocation < maxSpawnNumber)
 	{

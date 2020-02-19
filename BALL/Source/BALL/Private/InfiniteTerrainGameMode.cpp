@@ -3,6 +3,8 @@
 #include "BALL.h"
 #include "InfiniteTerrainGameMode.h"
 #include "Terrain/Tile.h"
+#include "../Widget/Input.h"
+
 #include "Containers/Array.h"
 
 AInfiniteTerrainGameMode::AInfiniteTerrainGameMode()
@@ -12,6 +14,9 @@ AInfiniteTerrainGameMode::AInfiniteTerrainGameMode()
 
 	TileLocation.SetLocation(FVector(0, 0, 0));
 	//UE_LOG(LogTemp, Warning, TEXT("GameMode Construct C++"));
+
+
+
 }
 
 void AInfiniteTerrainGameMode::BeginPlay()
