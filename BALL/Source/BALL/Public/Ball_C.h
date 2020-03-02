@@ -61,8 +61,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float MaxForwardForce;
 
-	UPROPERTY(VisibleAnywhere)
-	class UBallInputComponent * MyInputComponent;
+	/*UPROPERTY(VisibleAnywhere)
+	class UBallInputComponent * MyInputComponent;*/
 
 
 

@@ -5,6 +5,7 @@
 #include "BallPlayerController_C.h"
 
 #include "../Widget/Input.h"
+#include "../Component/BallInputComponent.h"
 
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
@@ -21,6 +22,8 @@ ABallPlayerController_C::ABallPlayerController_C()
 	if (!ensure(InputBPClass.Class != nullptr)) return;
 
 	BPInput = InputBPClass.Class;
+
+	//BallInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("BallInputComponent"));
 }
 
 void ABallPlayerController_C::BeginPlay()

@@ -36,5 +36,8 @@ private:
 
 	TSubclassOf<class UUserWidget> BPInput;
 	class UInput* Input = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
+	class UBallInputComponent * BallInputComponent;
 	
 };

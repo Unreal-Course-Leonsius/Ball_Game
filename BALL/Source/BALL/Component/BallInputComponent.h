@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "../Public/Ball_C.h"
 #include "BallInputComponent.generated.h"
 
 
@@ -41,6 +40,7 @@ public:
 private:
 
 	UInputComponent* InputComponent = nullptr;
+	class ABallPlayerController_C* PlayerController;
 	class ABall_C * Player = nullptr;
 
 };

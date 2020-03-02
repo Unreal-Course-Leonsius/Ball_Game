@@ -5,6 +5,9 @@
 
 #include "Components/Button.h"
 
+#include "../Public/Ball_C.h"
+#include "../Public/BallPlayerController_C.h"
+
 
 //#include "../Component/PlayerInputComponent.h"
 
@@ -13,10 +16,11 @@ bool UInput::Initialize()
 	bool Success = Super::Initialize();
 	if (!Success) return false;
 
-	//GetWorld()->GetFirstPlayerController()->GetControlledPawn();
-
 	
-	Player = Cast<ABall_C>(GetOwningPlayerPawn());
+	PlayerController = Cast<ABallPlayerController_C>(GetWorld()->GetFirstPlayerController());
+	if (!ensure(PlayerController != nullptr)) return false;
+	
+	Player = PlayerController->GetPlayerBall();
 	if (!ensure(Player != nullptr)) return false;
 
 	if (!ensure(Left != nullptr)) return false;
@@ -35,9 +39,9 @@ bool UInput::Initialize()
 void UInput::SetGameUIMode()
 {
 
-	auto World = GetWorld();
+	/*auto World = GetWorld();
 
-	APlayerController* PlayerController = World->GetFirstPlayerController();
+	APlayerController* PlayerController = World->GetFirstPlayerController();*/
 
 	FInputModeGameAndUI Mode;
 	Mode.SetWidgetToFocus(this->TakeWidget());

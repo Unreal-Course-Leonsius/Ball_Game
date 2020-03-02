@@ -25,8 +25,6 @@ ABall_C::ABall_C()
 
 	//MyInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("MyInputComponent"));
 
-	/// Move Value
-	InputForward = 1;
 
 	//bCanJump = true; // Start being able to jump
 	//bCanMoveForward = true;
@@ -69,11 +67,15 @@ void ABall_C::BeginPlay()
 
 
 	MyControlRotator = GetActorRotation();
+	ForwardForce = MaxForwardForce;
 
 	GameMode = Cast<AInfiniteTerrainGameMode>(GetWorld()->GetAuthGameMode());
 	if (!ensure(GameMode != NULL)) return;
 
 	GameMode->IncreaseSpeed.AddUniqueDynamic(this, &ABall_C::IncreaseMaxForwardForce);
+
+	/// Move Value
+	InputForward = 1;
 
 	/*UEngine* Engine = GetGameInstance()->GetEngine();
 	if (!ensure(Engine != nullptr)) return;
@@ -87,14 +89,26 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
-	//if (!bStartHit) return;
+	if (!bStartHit) return;
 
 	HitActor = Hit.GetActor();
+	auto ArrayTags = HitActor->Tags;
 
-	if (OtherComp ->GetName() == "Ground")
+	if (ArrayTags.Num() == 0) return;
+
+	auto TagName = ArrayTags[0];
+
+	if (TagName == "None") return;
+
+	/*UEngine* Engine = GetGameInstance()->GetEngine();
+	if (!ensure(Engine != nullptr)) return;*/
+
+	if (TagName == "Ground")
 	{
 		ForwardForce = MaxForwardForce;
 		UE_LOG(LogTemp, Warning, TEXT("Ground Condition"));
+
+		//Engine->AddOnScreenDebugMessage(0, 10, FColor::Green, FString::Printf(TEXT("TagName = %s"), *TagName.ToString()));
 
 	}
 	
@@ -103,31 +117,34 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 	if (HitActor == nullptr) { return; }
 
 	/// Find if it's Tag Actor. if it's Pillar and Jump
-	auto ArrayTags = HitActor->Tags;
-	if (ArrayTags.Num() > 0)
+	//auto ArrayTags = HitActor->Tags;
+	if (TagName == "Pillar")
 	{
 		//auto TagComponent = Cast<USceneComponent>(HitActor->GetComponentsByTag(USceneComponent::StaticClass(), FName("Pillar"))[0]);
 		//if (TagComponent == nullptr) return;
 		
-		auto TagName = ArrayTags[0];
+		//auto TagName = ArrayTags[0];
 		//UE_LOG(LogTemp, Warning, TEXT("TagArray = %s"), *TagName.ToString());
 		Jump();
+		//Engine->AddOnScreenDebugMessage(0, 10, FColor::Green, FString::Printf(TEXT("TagName = %s"), *TagName.ToString()));
 	}
 
 	auto arrowComponent = HitActor->FindComponentByClass<UArrowComponent>();
 	
 	/// Hit Obstacles
-	if (arrowComponent == nullptr && ArrayTags.Num() <= 0)
+	if (TagName == "Obstacle")
 	{
 		GetNotifyHitName(HitActor);
 		InputForward = 0;
 		Ball->AddImpulse(FVector(0.f, JumpImpulse, 0.f));
 		OnDeath.Broadcast();
-		UE_LOG(LogTemp, Warning, TEXT("Death Event Trigger"));
+		//UE_LOG(LogTemp, Warning, TEXT("Death Event Trigger"));
 
-		UEngine* Engine = GetGameInstance()->GetEngine();
+		/*UEngine* Engine = GetGameInstance()->GetEngine();
 		if (!ensure(Engine != nullptr)) return;
 		Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Death Event Trigger")));
+
+		Engine->AddOnScreenDebugMessage(0, 10, FColor::Green, FString::Printf(TEXT("TagName = %s"), *TagName.ToString()));*/
 	}
 	
 	
@@ -141,7 +158,7 @@ void ABall_C::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	TimeHit += DeltaTime;
-	if (TimeHit > 5)
+	if (TimeHit > 1)
 		bStartHit = true;
 
 	SimulateMove(DeltaTime);

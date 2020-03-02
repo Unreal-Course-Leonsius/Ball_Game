@@ -3,6 +3,8 @@
 #include "BALL.h"
 #include "BallInputComponent.h"
 
+#include "../Public/Ball_C.h"
+#include "../Public/BallPlayerController_C.h"
 
 
 // Sets default values for this component's properties
@@ -22,7 +24,8 @@ void UBallInputComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	Player = Cast<ABall_C>(GetOwner());
+	PlayerController = Cast<ABallPlayerController_C>(GetOwner());
+	Player = PlayerController->GetPlayerBall();
 
 	SetupInputComponent();
 }
@@ -38,7 +41,7 @@ void UBallInputComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UBallInputComponent::SetupInputComponent()
 {
-	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	InputComponent = Player->FindComponentByClass<UInputComponent>();
 	if (InputComponent)
 	{
 		/// Bind Input axis
