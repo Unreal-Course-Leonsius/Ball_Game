@@ -100,6 +100,11 @@ protected:
 
 	void GetNotifyHitName(AActor* HitActorr);
 
+protected:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UParticleSystem* ImpactEffect;
+
 
 public:
 	// Sets default values for this pawn's properties

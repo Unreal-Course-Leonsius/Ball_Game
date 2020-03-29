@@ -5,6 +5,7 @@
 
 #include "Math/Vector.h"
 #include "Engine/Engine.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Component/BallInputComponent.h"
 #include "InfiniteTerrainGameMode.h"
@@ -77,6 +78,8 @@ void ABall_C::BeginPlay()
 	/// Move Value
 	InputForward = 1;
 
+	
+
 	/*UEngine* Engine = GetGameInstance()->GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Ball_C_BeginPlay")));
@@ -109,6 +112,10 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 		UE_LOG(LogTemp, Warning, TEXT("Ground Condition"));
 
 		//Engine->AddOnScreenDebugMessage(0, 10, FColor::Green, FString::Printf(TEXT("TagName = %s"), *TagName.ToString()));
+		if (ImpactEffect == nullptr) return;
+		FVector ImpactEffectLocation = GetActorLocation();
+		ImpactEffectLocation.Z = ImpactEffectLocation.Z - 50.f;
+		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactEffect, ImpactEffectLocation);
 
 	}
 	
@@ -204,7 +211,7 @@ void ABall_C::UpdateRotation(float DeltaTime)
 	//UE_LOG(LogTemp, Warning, TEXT("InputRight = %f"), InputRight);
 
 
-	/// This is Updated Forwrad and Right Rotation
+	/// This is Updated forwrad and Right Rotation
 	MyControlRotator += FRotator(-InputForward * RotationSpeed * DeltaTime, 0.f, InputRight * RotationSpeed * DeltaTime);
 
 	if (FMath::Abs(MyControlRotator.Pitch) > 360)
