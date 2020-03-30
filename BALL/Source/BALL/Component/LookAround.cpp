@@ -3,6 +3,7 @@
 #include "BALL.h"
 #include "LookAround.h"
 #include "../Public/Ball_C.h"
+#include "../Public/BallPlayerController_C.h"
 
 
 
@@ -23,8 +24,8 @@ void ULookAround::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-
-	Player = Cast<ABall_C>(GetOwner());
+	ABallPlayerController_C* PlayerController = Cast<ABallPlayerController_C>(GetOwner());
+	Player = Cast<ABall_C>(PlayerController->GetPawn());
 
 	SetupInputComponent();
 	

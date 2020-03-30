@@ -16,16 +16,14 @@ ABall_C::ABall_C()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Initialize Vairables
+	// Initialize Var
 	RollTorque = 5000000.0f;
 	JumpImpulse = 180000.0f;
 	MaxRightForce = 2500.f;
 	RotationSpeed = 750;
 	MaxForwardForce = 3000.f;
 
-
-	//MyInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("MyInputComponent"));
-
+	//BallMotionEX = CreateDefaultSubobject<UParticleSystemComponent>(FName("Effect Component"));
 
 	//bCanJump = true; // Start being able to jump
 	//bCanMoveForward = true;
@@ -42,6 +40,15 @@ void ABall_C::Initialize(UStaticMeshComponent * ball, USceneComponent * scene, U
 	Scene = scene;
 	SpringArm = springarm;
 	Camera = camera;
+
+	RootComponent = Ball;
+	/*BallMotionEX->SetupAttachment(RootComponent);
+
+	if (BallMotionEX != nullptr)
+	{
+		BallMotionEX->SetRelativeLocation(GetActorLocation());
+	}*/
+	
 
 	Setting();
 
@@ -76,7 +83,7 @@ void ABall_C::BeginPlay()
 	GameMode->IncreaseSpeed.AddUniqueDynamic(this, &ABall_C::IncreaseMaxForwardForce);
 
 	/// Move Value
-	InputForward = 1;
+	//InputForward = 1;
 
 	
 
@@ -109,13 +116,14 @@ void ABall_C::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, 
 	if (TagName == "Ground")
 	{
 		ForwardForce = MaxForwardForce;
-		UE_LOG(LogTemp, Warning, TEXT("Ground Condition"));
+		//UE_LOG(LogTemp, Warning, TEXT("Ground Condition"));
 
 		//Engine->AddOnScreenDebugMessage(0, 10, FColor::Green, FString::Printf(TEXT("TagName = %s"), *TagName.ToString()));
 		if (ImpactEffect == nullptr) return;
 		FVector ImpactEffectLocation = GetActorLocation();
-		ImpactEffectLocation.Z = ImpactEffectLocation.Z - 50.f;
+		ImpactEffectLocation.Y = ImpactEffectLocation.Y - 50.f;
 		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactEffect, ImpactEffectLocation);
+
 
 	}
 	
@@ -268,6 +276,7 @@ void ABall_C::Jump()
 	Ball->AddImpulse(Impulse);
 	//bCanJump = false;
 
+	//BallMotionEX->Deactivate();
 	UE_LOG(LogTemp, Error, TEXT("MaxForwardForce = %f, ForwardForce = %f"), MaxForwardForce, ForwardForce);
 
 }

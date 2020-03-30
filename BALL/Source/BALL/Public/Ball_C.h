@@ -61,6 +61,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float MaxForwardForce;
 
+	/*UPROPERTY(VisibleAnywhere, Category = "Particle System")
+	UParticleSystemComponent *BallMotionEX = nullptr;*/
+
 	/*UPROPERTY(VisibleAnywhere)
 	class UBallInputComponent * MyInputComponent;*/
 

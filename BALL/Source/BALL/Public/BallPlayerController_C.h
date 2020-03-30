@@ -39,5 +39,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	class UBallInputComponent * BallInputComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	class ULookAround * CameraView;
 	
 };
