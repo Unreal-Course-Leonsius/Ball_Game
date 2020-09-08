@@ -17,7 +17,27 @@ private:
 
 	/** StaticMesh used for the ball -- we don't create we find Components */
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ball, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, Category = "RootMesh")
+	USphereComponent *BallRoot;
+
+	UPROPERTY(VisibleAnywhere, Category = "RootMesh")
 	class UStaticMeshComponent *Ball;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent *JumpEffect = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UAudioComponent *JumpSound;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent *ImpactEffect = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UAudioComponent *ImpactSound;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent *TraceEffect = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UAudioComponent *traceSound;
+	FName SparksVelocity;
 
 	class USceneComponent *Scene;
 
@@ -37,13 +57,13 @@ private:
 	float ForwardForce;
 	float ChangeForce = 200;
 
-	bool bStartHit = false;
-	float TimeHit = 0.f;
+	/*bool bStartHit = false;
+	float TimeHit = 0.f;*/
 
 
 private:
 
-
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float MaxRightForce;
 
@@ -57,10 +77,12 @@ private:
 	/** Vertical impulse to apply when pressing jump */
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float JumpImpulse;
-
+	/* Limit is 4500 */
 	UPROPERTY(EditDefaultsOnly, Category = "Movement Property")
 	float MaxForwardForce;
 
+
+	bool bNotifyHit;
 	/*UPROPERTY(VisibleAnywhere, Category = "Particle System")
 	UParticleSystemComponent *BallMotionEX = nullptr;*/
 
@@ -105,8 +127,8 @@ protected:
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Effects")
-	UParticleSystem* ImpactEffect;
+	//UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	//UParticleSystem* ImpactEffect;
 
 
 public:
@@ -127,11 +149,14 @@ public:
 	USpringArmComponent *GetSpringArmComponent() { return SpringArm; }
 
 
+	/* Game Start from Firts_Level Blueprint */
+	UFUNCTION(BlueprintCallable, Category = "Start Game")
+	void SetInputForward(float Val = 0) { InputForward = Val; }
 
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void Initialize(UStaticMeshComponent *ball, USceneComponent *scene, USpringArmComponent *springarm, UCameraComponent* camera);
+	void Initialize(USceneComponent *scene, USpringArmComponent *springarm, UCameraComponent* camera);
 
 	/* Put Components Settings */
 	void Setting();

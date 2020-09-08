@@ -29,7 +29,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Tile Array")
 	TArray<TSubclassOf<class ATile>> TileBlueprints;
-	
+
 	FTransform TileLocation;
 
 protected:

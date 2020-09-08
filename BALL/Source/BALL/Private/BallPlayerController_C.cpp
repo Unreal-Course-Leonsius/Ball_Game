@@ -7,6 +7,7 @@
 #include "../Widget/Input.h"
 #include "../Component/BallInputComponent.h"
 #include "../Component/LookAround.h"
+#include "../Component/BallInputTouchComponent.h"
 
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
@@ -17,15 +18,16 @@ ABallPlayerController_C::ABallPlayerController_C()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController_Constructor"));
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController_Constructor"));
 
 	ConstructorHelpers::FClassFinder<UUserWidget> InputBPClass(TEXT("/Game/Widget/WBP_Input"));
 	if (!ensure(InputBPClass.Class != nullptr)) return;
 
 	//BPInput = InputBPClass.Class;
 
-	BallInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("BallInputComponent"));
-	CameraView = CreateDefaultSubobject<ULookAround>(TEXT("CameraViewComponent"));
+	//BallInputComponent = CreateDefaultSubobject<UBallInputComponent>(TEXT("BallInputComponent"));
+	BallInputTouchComponent = CreateDefaultSubobject<UBallInputTouchComponent>(TEXT("TouchInputComponent"));
+	//CameraView = CreateDefaultSubobject<ULookAround>(TEXT("CameraViewComponent"));
 }
 
 void ABallPlayerController_C::BeginPlay()
@@ -35,7 +37,7 @@ void ABallPlayerController_C::BeginPlay()
 	auto Ball = GetPlayerBall();
 	//UE_LOG(LogTemp, Warning, TEXT("Ball Name: %s"), *Ball->GetName());
 
-	CreateInputWidget();
+	//CreateInputWidget();
 	
 }
 

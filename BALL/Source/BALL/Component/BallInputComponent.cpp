@@ -48,7 +48,7 @@ void UBallInputComponent::SetupInputComponent()
 		InputComponent->BindAxis("WForward_Backward", this, &UBallInputComponent::MoveForward);
 		InputComponent->BindAxis("ALeft_DRight", this, &UBallInputComponent::MoveRight);
 		InputComponent->BindAction("Jump", IE_Pressed, this, &UBallInputComponent::PlayerJump);
-		UE_LOG(LogTemp, Error, TEXT("%s - has Component InputComponent..."), *GetOwner()->GetName());
+		//UE_LOG(LogTemp, Error, TEXT("%s - has Component InputComponent..."), *GetOwner()->GetName());
 	}
 
 }
